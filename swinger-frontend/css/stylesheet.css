@@ -80,3 +80,32 @@ li a:hover:not(.active) {
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
 }
+
+
+.fade-up-out {
+  animation: fade-up-out .7s ease-in forwards;
+}
+
+.fade-down-in {
+  animation: fade-down-in .7s ease-out forwards;
+}
+
+
+.card-border {
+  border: 1px solid #d9d9cc;
+  margin-bottom: 10px;
+  box-shadow: 1px 1px #d9d9cc;
+  background-color: #ffffff;
+}
+
+.card-padding {
+  margin: 10px;
+}
+
+.panel-background{
+  background-color: #bdbdbd
+}
+
+.jumbotron {
+  background-color: rgba(238,238,238,0.7)
+}

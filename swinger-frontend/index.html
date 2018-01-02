@@ -2,44 +2,84 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="css/stylesheet.css">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <script src="src/note.js"></script>
-    <script src="src/show.js"></script>
-    <script src="src/role.js"></script>
-    <script src="src/scene.js"></script>
-    <script src="src/index.js"></script>
-    <title></title>
+    <style>
+    body {
+      background: url(background.jpg) no-repeat center center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+    }
+    </style>
+    <title>Swinger</title>
   </head>
   <body>
-    <div class="container">
+    <div class="container" id="main-body">
       <div class="jumbotron">
 
 
-<!--HEADER AND SHOW BUTTON-->
-          <div class="center" >
-            <h1 id="header" alt="" onclick="transitionPage(this, HOMEPAGE, SHOWLIST)">Swinger</h1>
-            <div class="container">
-              <div class="dropdown">
-                <button class="dropbtn w3-medium w3-padding-small ">SHOWS</button>
-                <div class="dropdown-content" id="shows">
+<!--HEADER-->
+          <div class="container-fluid text-center" >
+              <img src="css/swinger_logo.png" />
+              <br /><br/>
+            </div>
+
+            </br>
+            <div id="header">
+                  <div class="container text-center">
+                    <div class="dropdown">
+                      <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">EXISTING SHOWS</button>
+                      <div class="dropdown-content" id="shows">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+          </div>
+          </div>
+
+<!-- NEW SHOW FORM -->
+      <br></br>
+        <div class"row jumbotron">
+          <div class="col-lg-12 card-border">
+            <div class"container">
+              <div class="container-fluid text-center" id="show-display">
+                <form id="create-show" class="" action="#" method="post">
+                  <div class="container" id="new-show">
+                    <h2>Add a new show:</h2>
+                      <h6>Show Title:</h6>
+                        <input class="" type="text" id="show-title" name="show-title"><br /><br />
+                        <button type="button" class="btn btn-info" id="submit-show">Submit Show</button><br /><br />
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>
           </div>
-
-
-<!--SHOW DISPLAY-->
-          <div class="center" id="show-display">
-
-          </div>
-
-
+        </div>
       </div>
+
     </div>
+
+  <!-- SHOWS BUTTON -->
+  <script src="config.js"></script>
+  <script src="src/note.js"></script>
+  <script src="src/show.js"></script>
+  <script src="src/role.js"></script>
+  <script src="src/scene.js"></script>
+  <script src="src/index.js"></script>
+  <script src="css/swinger_logo.png"></script>
+  <link rel=”css” href=”index.css”>
+
+
+
 
   </body>
 </html>

@@ -5,13 +5,14 @@ class Api::V1::RolesController < ApplicationController
   end
 
   def create
-    role = Role.new(title: params[:title], body: params[:content])
+    show = Show.all.find_by(name: params[:show])
+    role = Role.new(name: params[:name], show_id: show.id)
 
     if role.valid?
       role.save
       render json: role, status: 201
     else
-      render json: {message:"A Role needs both a Title & Content"}
+      render json: {message:"Each Role needs a name!"}
     end
   end
 

@@ -6,7 +6,7 @@ class Api::V1::ShowsController < ApplicationController
   end
 
   def create
-    show = Show.new(name: params[:name])
+    show = Show.new(name: params[:title])
 
     if show.valid?
       show.save

@@ -5,7 +5,7 @@ class Api::V1::NotesController < ApplicationController
   end
 
   def create
-    note = Note.new(title: params[:title], body: params[:content])
+    note = Note.new(role_id: params[:role_id], scene_id: params[:scene_id], body: params[:body])
 
     if note.valid?
       note.save

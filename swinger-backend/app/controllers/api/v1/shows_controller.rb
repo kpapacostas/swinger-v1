@@ -1,8 +1,8 @@
 class Api::V1::ShowsController < ApplicationController
 
   def index
-    shows = Show.all
-    render json: shows, status: 200
+    @shows = Show.all
+    render json: @shows
   end
 
   def create
@@ -28,6 +28,8 @@ class Api::V1::ShowsController < ApplicationController
   end
 
   def show
+    byebug
+    @show = Show.find_by(name: params[:id])
     render json: @show, status: 200
   end
 
@@ -36,8 +38,6 @@ class Api::V1::ShowsController < ApplicationController
     params.permit(:name)
   end
 
-  def set_show
-    @show = Show.find(params[:id])
-  end
+
 
 end

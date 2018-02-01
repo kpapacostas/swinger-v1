@@ -5,10 +5,10 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+user1 = User.create(username: 'kat', password: '123')
 
-
-show1 = Show.create(name: "Gypsy")
-show2 = Show.create(name: "A Chorus Line")
+show1 = Show.create(name: "Gypsy", user_id: 1)
+show2 = Show.create(name: "A Chorus Line", user_id: 1)
 
 role1 = Role.create(name: "Mamma Rose", show_id: 1)
 role2 = Role.create(name: "Maggie", show_id: 2)

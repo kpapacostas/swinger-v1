@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       resources :roles
       resources :scenes
       resources :notes
+      resources :users
     end
   end
 

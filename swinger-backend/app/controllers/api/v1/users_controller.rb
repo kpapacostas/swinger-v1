@@ -28,9 +28,12 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def show
-    render json: UserSerializer.new(User.first)
-    # user = User.find(params[:id])
-    # render json: user.display, status: 200
+    user = User.find(params[:id])
+    if user
+      render json: UserSerializer.new(user)
+    else
+      render ({ json: {erro: 'User not found'}, status: 401})
+    end
   end
 
 

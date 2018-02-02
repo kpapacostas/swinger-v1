@@ -17,20 +17,19 @@ class Api::V1::ShowsController < ApplicationController
   end
 
   def update
-    @show.update(title: params[:title], body: params[:content])
-    render json: @show, status: 200
+    # @show.update(title: params[:title], body: params[:content])
+    # render json: @show, status: 200
   end
 
   def destroy
-    showId = @show.id
+    showId = Show.find(params[:id]).id
     @show.destroy
     render json: {message:"Zap! Show deleted", showId:showId}
   end
 
   def show
-    byebug
-    @show = Show.find_by(name: params[:id])
-    render json: @show, status: 200
+    show = Show.find_by(name: params[:id])
+    render json: ShowSerializer.new(show)
   end
 
   private

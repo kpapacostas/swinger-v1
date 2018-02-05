@@ -10,14 +10,19 @@ class Sidebar extends React.Component {
 
   handleShowClick = e => {
     let showName = e.target.innerHTML;
+    Array.from(document.getElementsByClassName("active item")).map(el => {
+      return (el.className = "item");
+    });
+    e.target.className = "active item";
 
+    this.props.changeCurrentShow(e);
     this.props.fetchCurrentShow(null, showName);
   };
 
   showsDisplay = () => {
     return this.shows().map((show, i) => {
       return (
-        <a key={i} onClick={this.handleShowClick} class="center item">
+        <a key={i} onClick={this.handleShowClick} className="item">
           {show.name}
         </a>
       );
@@ -27,7 +32,7 @@ class Sidebar extends React.Component {
   render() {
     return (
       <div>
-        <div className={`ui large left fixed vertical menu`}>
+        <div className={`ui medium left fixed vertical menu`}>
           <div className="item logo">
             <img
               alt=""
@@ -35,12 +40,23 @@ class Sidebar extends React.Component {
               className="ui medium image item"
             />
           </div>
-          <h3 className="center item">MY SHOWS</h3>
+          <h3 className=" item">MY SHOWS</h3>
           {this.props.loggedIn ? this.showsDisplay() : null}
           <br />
-          <div className="ui small button full" href="">
+          <div
+            onClick={this.props.handleNewShow}
+            className="ui small button full"
+            href=""
+          >
             <i className="add circle icon" />
             Add New Show!
+          </div>
+          <div
+            onClick={this.props.handleLogout}
+            className="ui small button full"
+            href=""
+          >
+            Sign Out
           </div>
         </div>
       </div>

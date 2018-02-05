@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 
@@ -24,6 +23,8 @@ class Login extends React.Component {
       case "password":
         this.setState({ password: value });
         break;
+      default:
+        return null;
     }
   };
 
@@ -39,15 +40,15 @@ class Login extends React.Component {
     const register = this.props.register;
 
     return (
-      <div class="ui middle aligned center aligned grid">
-        <div class="column">
-          <h2 class="ui image header">
-            <div class="content">Log-in to your account</div>
+      <div className="ui middle aligned center aligned grid">
+        <div className="column">
+          <h2 className="ui image header">
+            <div className="content">Log-in to your account</div>
           </h2>
-          <form onSubmit={this.handleSubmit} class="ui large form">
-            <div class="field">
-              <div class="ui left icon input">
-                <i class="user icon" />
+          <form onSubmit={this.handleSubmit} className="ui large form">
+            <div className="field">
+              <div className="ui left icon input">
+                <i className="user icon" />
                 <input
                   onChange={this.handleChange}
                   type="text"
@@ -57,9 +58,9 @@ class Login extends React.Component {
                 />
               </div>
             </div>
-            <div class="field">
-              <div class="ui left icon input">
-                <i class="lock icon" />
+            <div className="field">
+              <div className="ui left icon input">
+                <i className="lock icon" />
                 <input
                   onChange={this.handleChange}
                   type="password"
@@ -69,14 +70,14 @@ class Login extends React.Component {
                 />
               </div>
             </div>
-            <button class="ui fluid large teal submit button">Login</button>
-            <div class="ui error message" />
+            <button className="ui fluid large teal submit button">Login</button>
+            <div className="ui error message" />
           </form>
           <br />
           <br />
           New to Swinger ?
           <br />
-          <button class="small ui teal basic button" onClick={register}>
+          <button className="small ui teal basic button" onClick={register}>
             Register
           </button>
         </div>

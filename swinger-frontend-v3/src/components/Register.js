@@ -24,25 +24,30 @@ class Register extends React.Component {
     switch (input) {
       case "username":
         this.setState({ username: value });
+        break;
       case "password":
         this.setState({ password: value });
+        break;
       case "confirmPassword":
         this.setState({ confirmPassword: value });
+        break;
+      default:
+        return null;
     }
   };
 
   render() {
     return (
-      <div class="ui middle aligned center aligned grid">
-        <div class="column">
-          <h2 class="ui image header">
-            <div class="content">Sign Up!</div>
+      <div className="ui middle aligned center aligned grid">
+        <div className="column">
+          <h2 className="ui image header">
+            <div className="content">Sign Up!</div>
           </h2>
 
-          <form class="ui large form">
-            <div class="field">
-              <div class="ui left icon input">
-                <i class="user icon" />
+          <form className="ui large form">
+            <div className="field">
+              <div className="ui left icon input">
+                <i className="user icon" />
                 <input
                   onChange={this.handleChange}
                   type="text"
@@ -52,9 +57,9 @@ class Register extends React.Component {
               </div>
             </div>
 
-            <div class="field">
-              <div class="ui left icon input">
-                <i class="lock icon" />
+            <div className="field">
+              <div className="ui left icon input">
+                <i className="lock icon" />
                 <input
                   onChange={this.handleChange}
                   type="password"
@@ -64,9 +69,9 @@ class Register extends React.Component {
               </div>
             </div>
 
-            <div class="field">
-              <div class="ui left icon input">
-                <i class="lock icon" />
+            <div className="field">
+              <div className="ui left icon input">
+                <i className="lock icon" />
                 <input
                   onChange={this.handleChange}
                   type="password"
@@ -77,7 +82,7 @@ class Register extends React.Component {
             </div>
             <button
               onClick={this.handleClick}
-              class="ui fluid large teal submit button"
+              className="ui fluid large teal submit button"
             >
               Register
             </button>

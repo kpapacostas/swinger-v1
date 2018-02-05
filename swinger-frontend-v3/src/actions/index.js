@@ -1,25 +1,9 @@
-import {
-  FETCH_USER,
-  FETCH_USERS,
-  FETCH_SHOW,
-  FETCH_AUTH,
-  LOGOUT
-} from "./types";
-import { fetchCurrentUser, fetchUsers, fetchShow, getAuth } from "../adapters";
-
-export const fetchAllUsers = dispatch => {
-  return dispatch => {
-    dispatch({ type: "ASYNC_START" });
-
-    fetchUsers().then(data => {
-      dispatch({ type: FETCH_USERS, users: data });
-    });
-  };
-};
+import { FETCH_SHOW, FETCH_AUTH, LOGOUT } from "./types";
+import { fetchCurrentUser, fetchShow, getAuth } from "../adapters";
 
 export const fetchUser = dispatch => {
   return dispatch => {
-    // dispatch({ type: "ASYNC_START" });
+    dispatch({ type: "ASYNC_START" });
 
     fetchCurrentUser().then(data => {
       dispatch({ type: FETCH_AUTH, auth: data });
@@ -30,7 +14,6 @@ export const fetchUser = dispatch => {
 export const fetchCurrentShow = (dispatch, showName) => {
   return dispatch => {
     dispatch({ type: "ASYNC_START" });
-
     fetchShow(showName).then(data => {
       dispatch({ type: FETCH_SHOW, show: data });
     });

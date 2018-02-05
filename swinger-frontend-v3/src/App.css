@@ -22,11 +22,27 @@
   font-size: large;
 }
 
+.pushed {
+  position:relative;
+  margin-left: 400px;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
+.show-sidebar {
+  position: absolute;
+  margin-left: 0;
+  width: 30%
+}
+
+.show-menu {
+  position: absolute;
+  margin-right: 0;
+  width: 70%;
+}
 
 @keyframes bounce {
 	0%, 100%, 20%, 50%, 80% {
@@ -93,4 +109,28 @@ img:hover {
 
 .full {
   width: 100%;
+}
+
+@gray: #333;
+@gray-light: #aaa;
+@gray-lighter: #eee;
+@space: 40px;
+@blue: #428bca;
+@blue-dark: darken(@blue, 5%);
+
+/* // Mixin for transition/transform */
+.translate(@x; @y) {
+  -webkit-transform: translate(@x, @y);
+      -ms-transform: translate(@x, @y);
+          transform: translate(@x, @y);
+}
+.transition(@transition) {
+  -webkit-transition: @transition;
+          transition: @transition;
+}
+.transition-transform(@transition) {
+  -webkit-transition: -webkit-transform @transition;
+     -moz-transition: -moz-transform @transition;
+       -o-transition: -o-transform @transition;
+          transition: transform @transition;
 }

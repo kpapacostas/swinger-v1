@@ -1,12 +1,9 @@
 import React from "react";
-import { NavLink, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import withAuth from "../hocs/withAuth";
 
 class Navbar extends React.Component {
   render() {
-    const currentUser = this.props.currentUser;
-
     return (
       <div>
         <div className="ui right menu">

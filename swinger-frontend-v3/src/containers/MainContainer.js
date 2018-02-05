@@ -1,6 +1,5 @@
 import React from "react";
 import ShowContainer from "./ShowContainer";
-import Navbar from "../components/Navbar";
 import { Route, withRouter } from "react-router-dom";
 import Login from "../components/Login";
 import Register from "../components/Register";
@@ -46,6 +45,7 @@ class MainContainer extends React.Component {
         <div>
           {this.props.history.location.pathname === "/" ? (
             <img
+              alt=""
               onClick={this.handleLoginClick}
               className="bounce_button"
               src={require("../logo.jpg")}

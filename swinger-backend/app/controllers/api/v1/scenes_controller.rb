@@ -5,9 +5,7 @@ class Api::V1::ScenesController < ApplicationController
   end
 
   def create
-    show = Show.all.find_by(name: params[:show])
-
-    scene = Scene.new(number: params[:number], act: params[:act], show_id: show.id)
+    scene = Scene.new(number: params[:number], act: params[:act], show_id: params[:show])
 
     if scene.valid?
       scene.save

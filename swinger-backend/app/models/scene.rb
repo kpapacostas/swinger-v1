@@ -3,6 +3,6 @@ class Scene < ApplicationRecord
   has_many :notes
   has_many :roles, through: :notes
 
-  validates :number, :show_id, :act, presence: true
+  # validates :number, :show_id, :act, presence: true
 
 end

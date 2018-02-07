@@ -6,36 +6,38 @@ class Api::V1::ShowsController < ApplicationController
   end
 
   def create
-    show = Show.new(name: params[:title])
+    show = Show.new(title: params[:title], user_id: params[:userId])
 
     if show.valid?
       show.save
       render json: show, status: 201
     else
-      render json: {message:"A Show needs a name!"}
+      render json: {message:"A Show needs a title!"}
     end
   end
 
   def update
-    # @show.update(title: params[:title], body: params[:content])
-    # render json: @show, status: 200
+    @show = Show.find(params[:id])
+    user = User.find(@show.user_id)
+    @show.update(title: params[:title])
+    render json: UserSerializer.new(user), status: 200
   end
 
   def destroy
-    showId = Show.find(params[:id]).id
+    @show = Show.find(params[:id])
+    user = User.find(@show.user_id)
+    @show.act_I_scenes.each{|s| s.destroy}
+    @show.act_II_Scenes.each{|s| s.destroy}
+    @show.roles.each{|r| r.destroy}
     @show.destroy
-    render json: {message:"Zap! Show deleted", showId:showId}
+    render json: UserSerializer.new(user), status: 200
   end
 
   def show
-    show = Show.find_by(name: params[:id])
+    show = Show.find_by(title: params[:id])
     render json: ShowSerializer.new(show)
   end
 
-  private
-  def show_params
-    params.permit(:name)
-  end
 
 
 

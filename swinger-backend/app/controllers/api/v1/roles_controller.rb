@@ -5,8 +5,7 @@ class Api::V1::RolesController < ApplicationController
   end
 
   def create
-    show = Show.all.find_by(name: params[:show])
-    role = Role.new(name: params[:name], show_id: show.id)
+    role = Role.new(name: params[:name], show_id: params[:showId])
 
     if role.valid?
       role.save
@@ -17,12 +16,14 @@ class Api::V1::RolesController < ApplicationController
   end
 
   def update
-    @role.update(title: params[:title], body: params[:content])
-    render json: @role, status: 200
+    @role = Role.find_by(name: params[:name])
+    show = Show.find(@role.show_id)
+    @role.update(name: params[:change])
+    render json: ShowSerializer.new(show), status: 200
   end
 
   def destroy
-    roleId = @role.id
+    @role = Role.find(params[:id])
     @role.destroy
     render json: {message:"Zap! Role deleted", roleId:roleId}
   end

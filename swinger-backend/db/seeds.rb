@@ -7,8 +7,8 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 user1 = User.create(username: 'kat', password: '123')
 
-show1 = Show.create(name: "Gypsy", user_id: 1)
-show2 = Show.create(name: "A Chorus Line", user_id: 1)
+show1 = Show.create(title: "Gypsy", user_id: 1)
+show2 = Show.create(title: "A Chorus Line", user_id: 1)
 
 role1 = Role.create(name: "Mamma Rose", show_id: 1)
 role2 = Role.create(name: "Maggie", show_id: 2)
@@ -36,4 +36,7 @@ scene19 = Scene.create(number: 4, act: 2, show_id: 2)
 scene20 = Scene.create(number: 5, act: 2, show_id: 2)
 
 
-note1 = Note.create(role_id: 1, scene_id: 1, body: "Do it well!")
+note1 = Slide.create(role_id: 1, scene_id: 1, body: "Do it well!")
+note1 = Slide.create(role_id: 1, scene_id: 2, body: "Do it well!")
+note1 = Slide.create(role_id: 1, scene_id: 3, body: "Do it well!")
+note1 = Slide.create(role_id: 1, scene_id: 4, body: "Do it well!")

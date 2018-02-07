@@ -3,6 +3,9 @@ const headers = {
   "Content-Type": "application/json"
 };
 
+//############################################################################
+//USERS
+
 export const newUser = data => {
   return fetch("http://localhost:3000/api/v1/users", {
     headers: headers,
@@ -24,12 +27,16 @@ export const fetchCurrentUser = () => {
   }).then(res => res.json());
 };
 
-export const fetchUsers = () => {
-  return fetch("http://localhost:3000/api/v1/users", {
+export const getAuth = data => {
+  return fetch("http://localhost:3000/api/v1/auth", {
     headers: headers,
-    method: "GET"
+    method: "POST",
+    body: JSON.stringify(data)
   }).then(resp => resp.json());
 };
+
+//############################################################################
+//SHOW / SCENE / ROLE
 
 export const fetchShow = showName => {
   let url = `http://localhost:3000/api/v1/shows/${showName}`;
@@ -39,10 +46,78 @@ export const fetchShow = showName => {
   }).then(resp => resp.json());
 };
 
-export const getAuth = data => {
-  return fetch("http://localhost:3000/api/v1/auth", {
-    headers: headers,
+export const createShow = (title, userId) => {
+  const params = {
     method: "POST",
+    headers: headers,
+    body: JSON.stringify({ title, userId })
+  };
+  return fetch("http://localhost:3000/api/v1/shows", params).then(resp =>
+    resp.json()
+  );
+};
+
+export const createScene = (number, act, show) => {
+  const params = {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify({ number, act, show })
+  };
+  return fetch("http://localhost:3000/api/v1/scenes", params).then(resp =>
+    resp.json()
+  );
+};
+
+export const createRole = (name, showId) => {
+  const params = {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify({ name, showId })
+  };
+  return fetch("http://localhost:3000/api/v1/roles", params).then(resp =>
+    resp.json()
+  );
+};
+
+export const editShow = data => {
+  const params = {
+    method: "PATCH",
+    headers: headers,
     body: JSON.stringify(data)
-  }).then(resp => resp.json());
+  };
+  return fetch(`http://localhost:3000/api/v1/shows/${data.id}`, params).then(
+    resp => resp.json()
+  );
+};
+
+export const editRole = data => {
+  const params = {
+    method: "PATCH",
+    headers: headers,
+    body: JSON.stringify(data)
+  };
+  return fetch(`http://localhost:3000/api/v1/roles/${data.id}`, params).then(
+    resp => console.log("new role", resp.json())
+  );
+};
+
+export const editScene = data => {
+  const params = {
+    method: "PATCH",
+    headers: headers,
+    body: JSON.stringify(data)
+  };
+  return fetch(`http://localhost:3000/api/v1/scenes/${data.id}`, params).then(
+    resp => resp.json()
+  );
+};
+
+export const destroyShow = id => {
+  const params = {
+    method: "DELETE",
+    headers: headers
+  };
+  return fetch(`http://localhost:3000/api/v1/shows/${id}`, params).then(resp =>
+    resp.json()
+  );
 };

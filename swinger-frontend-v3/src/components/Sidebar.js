@@ -13,17 +13,22 @@ class Sidebar extends React.Component {
     Array.from(document.getElementsByClassName("active item")).map(el => {
       return (el.className = "item");
     });
+
     e.target.className = "active item";
 
-    this.props.changeCurrentShow(e);
-    this.props.fetchCurrentShow(null, showName);
+    this.props.changeCurrentShow(showName);
   };
 
   showsDisplay = () => {
     return this.shows().map((show, i) => {
       return (
-        <a key={i} onClick={this.handleShowClick} className="item">
-          {show.name}
+        <a
+          name={show.title}
+          key={i}
+          onClick={this.handleShowClick}
+          className="item"
+        >
+          {show.title}
         </a>
       );
     });
@@ -32,7 +37,7 @@ class Sidebar extends React.Component {
   render() {
     return (
       <div>
-        <div className={`ui medium left fixed vertical menu`}>
+        <div className={`ui small left fixed vertical menu`}>
           <div className="item logo">
             <img
               alt=""
@@ -44,6 +49,7 @@ class Sidebar extends React.Component {
           {this.props.loggedIn ? this.showsDisplay() : null}
           <br />
           <div
+            id="new"
             onClick={this.props.handleNewShow}
             className="ui small button full"
             href=""

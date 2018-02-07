@@ -1,5 +1,19 @@
-import { FETCH_SHOW, FETCH_AUTH, LOGOUT } from "./types";
-import { fetchCurrentUser, fetchShow, getAuth } from "../adapters";
+import {
+  FETCH_SHOW,
+  FETCH_AUTH,
+  LOGOUT,
+  UPDATE_SHOWS,
+  CREATE_SHOW,
+  DELETE_SHOW
+} from "./types";
+import {
+  fetchCurrentUser,
+  fetchShow,
+  getAuth,
+  editShow,
+  createShow,
+  destroyShow
+} from "../adapters";
 
 export const fetchUser = dispatch => {
   return dispatch => {
@@ -40,4 +54,32 @@ export const logIn = (dispatch, data, history) => {
 export const logOut = () => {
   localStorage.removeItem("token");
   return { type: LOGOUT };
+};
+
+export const updateShow = (dispatch, data) => {
+  return dispatch => {
+    dispatch({ type: "ASYNC_START" });
+    editShow(data).then(resp => {
+      console.log("in update show", resp);
+      dispatch({ type: UPDATE_SHOWS, show: resp });
+    });
+  };
+};
+
+export const createNewShow = (dispatch, data) => {
+  return dispatch => {
+    dispatch({ type: "ASYNC_START" });
+    createShow(data).then(resp => {
+      dispatch({ type: CREATE_SHOW, show: resp });
+    });
+  };
+};
+
+export const deleteShow = (dispatch, id) => {
+  return dispatch => {
+    dispatch({ type: "ASYNC_START" });
+    destroyShow(id).then(resp => {
+      dispatch({ type: DELETE_SHOW });
+    });
+  };
 };

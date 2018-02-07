@@ -107,6 +107,44 @@ img:hover {
 
 }
 
+.role-card{
+  width: 100px;
+  height: 30px;
+  text-align: left;
+  position: absolute;
+}
+
+
+.scene-card{
+  width: 100px;
+  height: 30px;
+  padding-top:0;
+  text-align: left;
+  position: absolute;
+  z-index: 1;
+}
+
+.scenes {
+  width: 50%;
+}
+.container-segment{
+  width: 80%;
+  height: 100%;
+  position: relative;
+  z-index: -1;
+  padding-bottom: 50px
+}
+
+.show-form {
+  margin-right: 500px;
+}
+
+.small-field{
+  position: relative;
+  width: 100px;
+  height: 30px;
+}
+
 .full {
   width: 100%;
 }

@@ -2,61 +2,49 @@ import React from "react";
 import { connect } from "react-redux";
 import Sidebar from "../components/Sidebar";
 import withAuth from "../hocs/withAuth";
-import NewShowForm from "../components/NewShowModal";
-import { findDOMNode } from "react-dom";
-import $ from "jquery";
+import NewShowForm from "../components/NewShowForm";
+import SceneDisplay from "../components/ScenesDisplay";
+import EditForm from "../components/EditShowForm";
+import { withRouter } from "react-router-dom";
+import RoleDisplay from "../components/RolesDisplay";
 
 class ShowContainer extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      newCurrentShow: false,
-      tracksClicked: true,
-      scenesClicked: false,
-      newShowForm: false
+      newShowForm: false,
+      editShowForm: false
     };
   }
 
-  handleNewShow = () => {
-    this.setState({ newShowForm: true }, () => this.handleModal());
+  changeCurrentShow = showTitle => {
+    this.setState(
+      {
+        newShowForm: false,
+        editShowForm: false
+      },
+      () => this.props.fetchCurrentShow(null, showTitle)
+    );
   };
 
-  // handleModal = () => {
-  //   let el = findDOMNode(this.refs.showModal);
-  //   $(el).modal("show");
-  // };
-
-  changeCurrentShow = () =>
-    this.setState({
-      newCurrentShow: true,
-      tracksClicked: true,
-      scenesClicked: false
-    });
-
-  currentShowRoles = () => {
-    return this.props.currentShow.scene_roles[0].roles.map((r, i) => (
-      <div key={i} className="ui message">
-        <p>{r.name}</p>
-      </div>
-    ));
+  deleteShow = () => {
+    this.props.deleteShow(null, this.props.currentShow.id);
   };
 
-  currentShowScenes = () => {
-    return this.props.currentShow.scene_roles[0].scenes.map((s, i) => (
-      <div key={i} className="ui message">
-        <p>{s.number}</p>
-      </div>
-    ));
-  };
-
-  handleClick = e => {
-    switch (e.target.name) {
-      case "tracks":
-        this.setState({ tracksClicked: true, scenesClicked: false });
+  handleShowForm = e => {
+    switch (e.target.id) {
+      case "new":
+        this.setState({
+          newShowForm: true,
+          editShowForm: false
+        });
         break;
-      case "scenes":
-        this.setState({ scenesClicked: true, tracksClicked: false });
+      case "edit":
+        this.setState({
+          newShowForm: false,
+          editShowForm: true
+        });
         break;
       default:
         return null;
@@ -65,18 +53,31 @@ class ShowContainer extends React.Component {
 
   tabMenu = () => {
     return (
-      <div>
-        <div className="ui top attached tabular menu">
-          <a onClick={this.handleClick} name="tracks" className="item">
-            Tracks
-          </a>
-          <a onClick={this.handleClick} name="scenes" className="item">
-            Scenes
-          </a>
+      <div className="">
+        <br />
+        <h3>{this.props.currentShow.title}</h3>
+        <div className="ui small buttons">
+          <button id="edit" onClick={this.handleShowForm} className="ui button">
+            Edit
+          </button>
+          <div className="or" />
+          <button onClick={this.deleteShow} id="delete" className="ui button">
+            Delete
+          </button>
         </div>
-        <div className="ui bottom attached active tab segment">
-          {this.state.tracksClicked ? this.currentShowRoles() : null}
-          {this.state.scenesClicked ? this.currentShowScenes() : null}
+        <br />
+        <br />
+        <div className="segment">
+          <div className="">
+            <h4>Tracks</h4>
+            {<RoleDisplay />}
+          </div>
+          <br />
+          <br />
+          <div className="">
+            <h4>Scenes</h4>
+            {<SceneDisplay />}
+          </div>
         </div>
       </div>
     );
@@ -87,25 +88,33 @@ class ShowContainer extends React.Component {
       <div className="ui grid">
         <div className="three wide column">
           <Sidebar
-            handleNewShow={this.handleNewShow}
+            handleNewShow={this.handleShowForm}
             changeCurrentShow={this.changeCurrentShow}
             handleLogout={this.props.handleLogout}
           />
         </div>
         <div className="thirteen wide column">
-          {this.props.currentShow ? this.tabMenu() : null}
+          {this.props.currentShow &&
+          !this.state.newShowForm &&
+          !this.state.editShowForm
+            ? this.tabMenu()
+            : null}
+          {this.state.newShowForm ? (
+            <NewShowForm changeCurrentShow={this.changeCurrentShow} />
+          ) : null}
+          {this.state.editShowForm ? (
+            <EditForm changeCurrentShow={this.changeCurrentShow} />
+          ) : null}
         </div>
-        {this.state.newShowForm ? <NewShowForm /> : null}
       </div>
     );
   }
 }
 
 const mapStateToProps = state => {
-  console.log("map state to props", state.currentShow);
   return {
     currentUser: state.currentUser,
     currentShow: state.currentShow
   };
 };
-export default withAuth(connect(mapStateToProps)(ShowContainer));
+export default withRouter(withAuth(connect(mapStateToProps)(ShowContainer)));

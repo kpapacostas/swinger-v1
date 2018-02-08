@@ -35,7 +35,11 @@ class NewShowForm extends React.Component {
     e.preventDefault();
     createShow(this.state.showTitle, this.props.currentUser.id).then(json => {
       this.state.tracks.forEach(t => {
-        createRole(t, json.id);
+        if(this.state.tracks[t] !== ""){
+        return createRole(t, json.id);
+        }else {
+        return null
+      }
       });
       this.actIScenes(json.id);
       this.actIIScenes(json.id);
@@ -70,6 +74,19 @@ class NewShowForm extends React.Component {
         return null;
     }
   };
+
+  deleteTrack = (e) => {
+    e.preventDefault()
+    let tracks = this.state.tracks;
+    let index = e.target.id;
+    this.setState({
+      tracks: [
+        ...tracks.slice(0, index),
+        ...this.state.tracks.slice(index + 1)
+      ]
+    })
+  }
+
 
   newTrack = e => {
     e.preventDefault();
@@ -126,6 +143,13 @@ class NewShowForm extends React.Component {
                     name="track"
                     placeholder="Role Name"
                   />
+                  <button
+                    id={i}
+                    className="ui mini button"
+                    onClick={this.deleteTrack}
+                  >
+                    <i className="minus square icon"></i>
+                  </button>
                 </div>
               ))}
             </div>

@@ -44,7 +44,7 @@ class MainContainer extends React.Component {
       <div className="container">
         <div>
           {this.props.history.location.pathname === "/" ? (
-            <img
+            <img 
               alt=""
               onClick={this.handleLoginClick}
               className="bounce_button"

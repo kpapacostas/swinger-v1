@@ -7,8 +7,12 @@ class RoleDisplay extends React.Component {
 
   currentShowRoles = () => {
     return this.props.currentShow.scene_roles[0].roles.map((r, i) => (
-      <div key={i} className="ui tiny teal basic button">
-        <p>{r.name}</p>
+      <div
+        key={i}
+        onClick={this.props.displayRoleScenes}
+        className="ui tiny teal basic button"
+      >
+        <p id={r.id}>{r.name}</p>
       </div>
     ));
   };

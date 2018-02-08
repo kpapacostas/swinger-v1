@@ -91,13 +91,14 @@ export const editShow = data => {
 };
 
 export const editRole = data => {
+  console.log("in edit role");
   const params = {
     method: "PATCH",
     headers: headers,
     body: JSON.stringify(data)
   };
   return fetch(`http://localhost:3000/api/v1/roles/${data.id}`, params).then(
-    resp => console.log("new role", resp.json())
+    resp => resp.json()
   );
 };
 
@@ -118,6 +119,26 @@ export const destroyShow = id => {
     headers: headers
   };
   return fetch(`http://localhost:3000/api/v1/shows/${id}`, params).then(resp =>
+    resp.json()
+  );
+};
+
+export const destroyRole = id => {
+  const params = {
+    method: "DELETE",
+    headers: headers
+  };
+  return fetch(`http://localhost:3000/api/v1/roles/${id}`, params).then(resp =>
+    resp.json()
+  );
+};
+
+export const fetchRole = id => {
+  const params = {
+    method: "GET",
+    headers: headers
+  };
+  return fetch(`http://localhost:3000/api/v1/roles/${id}`, params).then(resp =>
     resp.json()
   );
 };

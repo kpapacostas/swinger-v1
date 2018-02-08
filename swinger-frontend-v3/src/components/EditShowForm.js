@@ -1,49 +1,92 @@
 import React from "react";
 import { connect } from "react-redux";
 import * as actions from "../actions";
-import { editShow, editRole } from "../adapters";
+import { editRole, createRole } from "../adapters";
 
 class EditForm extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      showTitle: ""
+      showTitle: "",
+      tracks: [],
+      newTracks: [{ 0: "" }]
     };
   }
 
   handleSubmit = e => {
     e.preventDefault();
-    const tracks = Array.from(
-      document.getElementsByClassName("track field")
-    ).map(t => ({ name: t.id, change: t.value }));
+    const newTracks = this.state.newTracks.map((t, i) => ({
+      name: this.state.newTracks[i],
+      showId: this.props.currentShow.id
+    }));
+
+    newTracks.forEach(t => {
+      createRole(t.name, t.showId);
+    });
+
+    const tracks = this.state.tracks.map((t, i) => ({
+      name: t.name,
+      change: t.change,
+      show: this.props.currentShow.id
+    }));
+    tracks.forEach(t => {
+      editRole(t);
+    });
 
     this.props.updateShow(null, {
       id: this.props.currentShow.id,
       title: this.state.showTitle
     });
-    tracks.forEach(t => {
-      editRole(t);
-    });
-    this.props.changeCurrentShow(this.state.showTitle);
+
+    this.props.changeCurrentShow(this.props.currentShow.title);
   };
 
   handleInputChange = e => {
-    this.setState({ showTitle: e.target.value });
+    switch (e.target.name) {
+      case "show-title":
+        this.setState({ showTitle: e.target.value });
+        break;
+      case "oldTrack":
+        let tracks = this.state.tracks;
+        let index = e.target.parentElement.id;
+        this.setState({
+          tracks: [
+            ...tracks.slice(0, index),
+            (tracks[index] = { name: e.target.id, change: e.target.value }),
+            ...this.state.tracks.slice(index + 1)
+          ]
+        });
+        break;
+      case "newTrack":
+        let newTracks = this.state.newTracks;
+        let newIndex = e.target.parentElement.id;
+        this.setState({
+          newTracks: [
+            ...newTracks.slice(0, newIndex),
+            (newTracks[newIndex] = e.target.value),
+            ...newTracks.slice(newIndex + 1)
+          ]
+        });
+        break;
+      default:
+        return null;
+    }
   };
 
   deleteTrack = e => {
-    console.log(e);
+    e.preventDefault();
+    this.props.deleteRole(null, parseInt(e.target.id, 10));
   };
 
   newTrack = e => {
     e.preventDefault();
-    let newIndex = this.state.tracks.length + 1;
-    this.setState({ tracks: [...this.state.tracks, { [`${newIndex}`]: "" }] });
+    this.setState({
+      newTracks: [...this.state.newTracks, { "no name": "" }]
+    });
   };
 
   render() {
-    console.log(this.state.tracks);
     if (this.props.currentShow) {
       return (
         <div className="ui grid">
@@ -59,22 +102,23 @@ class EditForm extends React.Component {
                 <input
                   id={this.props.currentShow.id}
                   onChange={this.handleInputChange}
-                  type="text"
                   name="show-title"
                   placeholder={this.props.currentShow.title}
                 />
               </div>
               <div className=" field">
-                <label>Tracks</label>
-                {this.props.currentShow.scene_roles[0].roles.map((t, i) => (
+                <label>Current Tracks</label>
+                {this.props.currentShow.scene_roles[0].roles.map((r, i) => (
                   <div key={i} id={i} className="field">
                     <input
-                      type="text"
-                      id={t.name}
+                      id={r.name}
+                      onChange={this.handleInputChange}
+                      name="oldTrack"
                       className="track field"
-                      placeholder={t.name}
+                      placeholder={r.name}
                     />
                     <button
+                      id={r.id}
                       className="ui mini button"
                       onClick={this.deleteTrack}
                     >
@@ -82,6 +126,19 @@ class EditForm extends React.Component {
                     </button>
                   </div>
                 ))}
+                <label>New Tracks</label>
+                <div>
+                  {this.state.newTracks.map((t, i) => (
+                    <div key={i} id={i} className="track field">
+                      <input
+                        onChange={this.handleInputChange}
+                        type="text"
+                        name="newTrack"
+                        placeholder="Role Name"
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
               <br />
               <button onClick={this.newTrack} className="ui small button ">

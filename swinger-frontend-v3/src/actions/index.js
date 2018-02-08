@@ -4,7 +4,8 @@ import {
   LOGOUT,
   UPDATE_SHOWS,
   CREATE_SHOW,
-  DELETE_SHOW
+  DELETE_SHOW,
+  DELETE_ROLE
 } from "./types";
 import {
   fetchCurrentUser,
@@ -12,7 +13,8 @@ import {
   getAuth,
   editShow,
   createShow,
-  destroyShow
+  destroyShow,
+  destroyRole
 } from "../adapters";
 
 export const fetchUser = dispatch => {
@@ -60,8 +62,7 @@ export const updateShow = (dispatch, data) => {
   return dispatch => {
     dispatch({ type: "ASYNC_START" });
     editShow(data).then(resp => {
-      console.log("in update show", resp);
-      dispatch({ type: UPDATE_SHOWS, show: resp });
+      dispatch({ type: UPDATE_SHOWS, user: resp });
     });
   };
 };
@@ -79,7 +80,17 @@ export const deleteShow = (dispatch, id) => {
   return dispatch => {
     dispatch({ type: "ASYNC_START" });
     destroyShow(id).then(resp => {
-      dispatch({ type: DELETE_SHOW });
+      dispatch({ type: DELETE_SHOW, user: resp });
+    });
+  };
+};
+
+export const deleteRole = (dispatch, id) => {
+  return dispatch => {
+    dispatch({ type: "ASYNC_START" });
+    destroyRole(id).then(resp => {
+      console.log(resp);
+      dispatch({ type: DELETE_ROLE, show: resp });
     });
   };
 };

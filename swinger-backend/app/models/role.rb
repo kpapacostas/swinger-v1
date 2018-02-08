@@ -4,4 +4,19 @@ class Role < ApplicationRecord
   has_many :scenes, through: :notes
 
   validates :name, :show_id, presence: true
+
+
+  def slides
+    Slide.all.select do |s|
+      s.role_id === self.id
+    end
+  end
+
+  def scenes
+    self.slides.map do |s|
+      scene = Scene.find(s.scene_id)
+      slides = Slide.all.select{ |slide| slide.scene_id === scene.id}
+      scene_slides = {"number" => scene.number, "slides" => slides }
+    end
+  end
 end

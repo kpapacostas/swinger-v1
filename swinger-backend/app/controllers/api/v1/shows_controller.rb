@@ -30,7 +30,7 @@ class Api::V1::ShowsController < ApplicationController
     @show.act_II_Scenes.each{|s| s.destroy}
     @show.roles.each{|r| r.destroy}
     @show.destroy
-    render json: UserSerializer.new(user), status: 200
+    render json: user, status: 200
   end
 
   def show

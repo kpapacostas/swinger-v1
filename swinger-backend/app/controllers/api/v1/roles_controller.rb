@@ -1,5 +1,6 @@
 class Api::V1::RolesController < ApplicationController
-    def index
+  def index
+    byebug
     roles = Role.all
     render json: roles, status: 200
   end
@@ -17,19 +18,21 @@ class Api::V1::RolesController < ApplicationController
 
   def update
     @role = Role.find_by(name: params[:name])
-    show = Show.find(@role.show_id)
+    show = Show.find(params[:show])
     @role.update(name: params[:change])
     render json: ShowSerializer.new(show), status: 200
   end
 
   def destroy
     @role = Role.find(params[:id])
+    show = Show.find(@role.show_id)
     @role.destroy
-    render json: {message:"Zap! Role deleted", roleId:roleId}
+    render json: ShowSerializer.new(show)
   end
 
   def show
-    render json: @role, status: 200
+    @role = Role.find(params[:id])
+    render json: RoleSerializer.new(@role), status: 200
   end
 
   private

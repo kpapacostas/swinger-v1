@@ -256,7 +256,6 @@ document.addEventListener('DOMContentLoaded', () => {
       let role = Role.all.filter((r)=>{return r.name === roleName})[0]
       let sceneNum = parseInt(e.target.innerHTML)
       let show = Show.findShowByName(document.getElementById('show-title').innerHTML)[0]
-      debugger
       if (e.target.parentElement.parentElement.children[0].innerHTML === "Act I"){
           act = 1
         } else {
@@ -274,11 +273,16 @@ document.addEventListener('DOMContentLoaded', () => {
       NoteAdapter.create(scene, role, body)
 
       let roleScenesI = document.getElementById('role-scenes-act-I')
-      debugger
       let roleScenesII = document.getElementById('role-scenes-act-II')
 
-      if (act === 1){
+      let listActI = Array.from(document.getElementById('role-scenes-act-II').children).map((c)=>{
+        return Array.from(c.children)
+      })
+      let actIList = [].concat.apply([], listActI).map((c) =>{ return c.innerHTML})
 
+
+
+      if (act === 1){
         let sceneNode = document.createElement('DIV')
         sceneNode.innerHTML += `<a id="role-scene-link-1" href="#">Act I, Scene ${scene.number}</a>`
         roleScenesI.append(sceneNode)
@@ -294,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (e.target.id === 'role-scene-link-1'){
       let showEl = document.getElementById('role-note-diplay')
-      let show = Show.findRoleByName(document.getElementById('show-title').innerHTML)
+      let show = Role.findRoleByName(document.getElementById('show-title').innerHTML)
       let roleName = document.getElementById('role-name').innerHTML
       let role = Role.findRoleByName(roleName)[0]
 

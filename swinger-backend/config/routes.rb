@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       resources :scenes
       resources :notes
       resources :users
+      resources :slides
       post '/auth', to: 'auth#create'
       get '/current_user', to: 'auth#show'
     end

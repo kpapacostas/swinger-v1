@@ -36,7 +36,9 @@ scene19 = Scene.create(number: 4, act: 2, show_id: 2)
 scene20 = Scene.create(number: 5, act: 2, show_id: 2)
 
 
-note1 = Slide.create(role_id: 1, scene_id: 1, body: "Do it well!")
-note1 = Slide.create(role_id: 1, scene_id: 2, body: "Do it well!")
-note1 = Slide.create(role_id: 1, scene_id: 3, body: "Do it well!")
-note1 = Slide.create(role_id: 1, scene_id: 4, body: "Do it well!")
+slide1 = Slide.create(role_id: 1, scene_id: 1, number: 1, coordinates: {x: 20, y: 20})
+slide5 = Slide.create(role_id: 1, scene_id: 1, number: 2, coordinates: {x: 50, y: 20})
+slide6 = Slide.create(role_id: 1, scene_id: 1, number: 3, coordinates: {x: 100, y: 45})
+slide2 = Slide.create(role_id: 1, scene_id: 2, number: 4, coordinates: {x: 10, y: 20})
+slide3 = Slide.create(role_id: 1, scene_id: 3, coordinates: {x: 50, y: 100})
+slide4 = Slide.create(role_id: 1, scene_id: 4, coordinates: {x: 100, y: 75})

@@ -1,8 +1,13 @@
 class Api::V1::RolesController < ApplicationController
+
+  def show
+    @role = Role.find(params[:id])
+    render json: RoleSerializer.new(@role), status: 200
+  end
+
   def index
-    byebug
-    roles = Role.all
-    render json: roles, status: 200
+    @role = Role.find(params[:id])
+    render json: RoleSerializer.new(@role), status: 200
   end
 
   def create
@@ -30,10 +35,6 @@ class Api::V1::RolesController < ApplicationController
     render json: ShowSerializer.new(show)
   end
 
-  def show
-    @role = Role.find(params[:id])
-    render json: RoleSerializer.new(@role), status: 200
-  end
 
   private
   def role_params

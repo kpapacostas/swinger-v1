@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  title: MyString
   body: MyString
-  role_id: 1
-  scene_id: 1
+  slide_id: MyString
 
 two:
+  title: MyString
   body: MyString
-  role_id: 1
-  scene_id: 1
+  slide_id: MyString

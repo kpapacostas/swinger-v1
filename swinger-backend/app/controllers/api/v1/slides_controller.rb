@@ -1,12 +1,14 @@
 class Api::V1::SlidesController < ApplicationController
+
   def index
-    notes = Note.all
-    render json: notes, status: 200
+    slides = Slide.all
+    render json: slides, status: 200
   end
 
   def create
-    slide = Slide.new(role_id: params[:roleId], scene_id: params[:sceneId], body: params[:body])
-
+    byebug
+    slide = Slide.new(role_id: params[:roleId], scene_id: params[:sceneId], coordinates: params[:coordinates])
+    byebug
     if slide.valid?
       slide.save
       render json: slide, status: 201
@@ -16,27 +18,32 @@ class Api::V1::SlidesController < ApplicationController
   end
 
   def update
-    @note.update(title: params[:title], body: params[:content])
-    render json: @note, status: 200
+    @role = Role.find(params[:role_id])
+    slide = Slide.find(params[:id])
+    slide.update()
+    render json: RoleSerializer.new(@role), status: 200
   end
 
   def destroy
-    noteId = @note.id
-    @note.destroy
-    render json: {message:"Zap! Note deleted", noteId:noteId}
+    slide = Slide.find(params[:id])
+    slideId = slide.id
+    slide.destroy
+    render json: {message:"Zap! Slide deleted", noteId:noteId}
   end
 
   def show
-    render json: @note, status: 200
+    byebug
+    slide = Slide.find(params[:id])
+    render json: slide, status: 200
   end
 
-  private
-  def note_params
-    params.permit(:title, :content)
-  end
-
-  def set_note
-    @note = Note.find(params[:id])
-  end
+  # private
+  # def note_params
+  #   params.permit(:title, :content)
+  # end
+  #
+  # def set_note
+  #   slide = Slide.find(params[:id])
+  # end
 
 end

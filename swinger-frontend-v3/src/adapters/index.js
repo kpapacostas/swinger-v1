@@ -14,6 +14,16 @@ export const newUser = data => {
   });
 };
 
+export const getAuth = data => {
+  return fetch("http://localhost:3000/api/v1/auth", {
+    headers: headers,
+    method: "POST",
+    body: JSON.stringify(data)
+  }).then(resp => resp.json());
+};
+
+//FETCH ////////////////////////////////////////////////////////////////////////
+
 export const fetchCurrentUser = () => {
   const token = localStorage.getItem("token");
 
@@ -27,17 +37,6 @@ export const fetchCurrentUser = () => {
   }).then(res => res.json());
 };
 
-export const getAuth = data => {
-  return fetch("http://localhost:3000/api/v1/auth", {
-    headers: headers,
-    method: "POST",
-    body: JSON.stringify(data)
-  }).then(resp => resp.json());
-};
-
-//############################################################################
-//SHOW / SCENE / ROLE
-
 export const fetchShow = showName => {
   let url = `http://localhost:3000/api/v1/shows/${showName}`;
   return fetch(url, {
@@ -45,6 +44,18 @@ export const fetchShow = showName => {
     method: "GET"
   }).then(resp => resp.json());
 };
+
+export const fetchRole = id => {
+  const params = {
+    method: "GET",
+    headers: headers
+  };
+  return fetch(`http://localhost:3000/api/v1/roles/${id}`, params).then(resp =>
+    resp.json()
+  );
+};
+
+//CREATE ////////////////////////////////////////////////////////////////////////
 
 export const createShow = (title, userId) => {
   const params = {
@@ -79,6 +90,19 @@ export const createRole = (name, showId) => {
   );
 };
 
+export const createSlide = data => {
+  const params = {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(data)
+  };
+  return fetch("http://localhost:3000/api/v1/slides", params).then(resp =>
+    resp.json()
+  );
+};
+
+//EDIT ////////////////////////////////////////////////////////////////////////
+
 export const editShow = data => {
   const params = {
     method: "PATCH",
@@ -91,7 +115,6 @@ export const editShow = data => {
 };
 
 export const editRole = data => {
-  console.log("in edit role");
   const params = {
     method: "PATCH",
     headers: headers,
@@ -113,6 +136,20 @@ export const editScene = data => {
   );
 };
 
+export const editSlide = data => {
+  console.log("in edit slide adapter", data);
+  const params = {
+    method: "PATCH",
+    headers: headers,
+    body: JSON.stringify(data)
+  };
+  return fetch(`http://localhost:3000/api/v1/slides/${data.id}`, params).then(
+    resp => resp.json()
+  );
+};
+
+//DELETE ////////////////////////////////////////////////////////////////////////
+
 export const destroyShow = id => {
   const params = {
     method: "DELETE",
@@ -126,16 +163,6 @@ export const destroyShow = id => {
 export const destroyRole = id => {
   const params = {
     method: "DELETE",
-    headers: headers
-  };
-  return fetch(`http://localhost:3000/api/v1/roles/${id}`, params).then(resp =>
-    resp.json()
-  );
-};
-
-export const fetchRole = id => {
-  const params = {
-    method: "GET",
     headers: headers
   };
   return fetch(`http://localhost:3000/api/v1/roles/${id}`, params).then(resp =>

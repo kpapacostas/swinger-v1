@@ -6,7 +6,10 @@ import {
   UPDATE_SHOWS,
   CREATE_SHOW,
   DELETE_SHOW,
-  DELETE_ROLE
+  DELETE_ROLE,
+  SLIDE_VIEW,
+  CHANGE_ROLE,
+  CHANGE_SCENE
 } from "./actions/types";
 
 const showReducer = (state = null, action) => {
@@ -37,9 +40,39 @@ const authReducer = (state = {}, action) => {
   }
 };
 
+const slideViewReducer = (state = false, action) => {
+  switch (action.type) {
+    case SLIDE_VIEW:
+      return !state;
+    default:
+      return state;
+  }
+};
+
+const roleReducer = (state = null, action) => {
+  switch (action.type) {
+    case CHANGE_ROLE:
+      return action.role.role;
+    default:
+      return state;
+  }
+};
+
+const sceneReducer = (state = null, action) => {
+  switch (action.type) {
+    case CHANGE_SCENE:
+      return action.scene;
+    default:
+      return state;
+  }
+};
+
 const rootReducer = combineReducers({
   currentUser: authReducer,
-  currentShow: showReducer
+  currentShow: showReducer,
+  currentRole: roleReducer,
+  currentScene: sceneReducer,
+  slideView: slideViewReducer
 });
 
 export default rootReducer;

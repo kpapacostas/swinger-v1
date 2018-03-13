@@ -5,7 +5,10 @@ import {
   UPDATE_SHOWS,
   CREATE_SHOW,
   DELETE_SHOW,
-  DELETE_ROLE
+  DELETE_ROLE,
+  CHANGE_ROLE,
+  SLIDE_VIEW,
+  CHANGE_SCENE
 } from "./types";
 import {
   fetchCurrentUser,
@@ -14,7 +17,9 @@ import {
   editShow,
   createShow,
   destroyShow,
-  destroyRole
+  destroyRole,
+  fetchRole,
+  editSlide
 } from "../adapters";
 
 export const fetchUser = dispatch => {
@@ -89,8 +94,36 @@ export const deleteRole = (dispatch, id) => {
   return dispatch => {
     dispatch({ type: "ASYNC_START" });
     destroyRole(id).then(resp => {
-      console.log(resp);
       dispatch({ type: DELETE_ROLE, show: resp });
     });
   };
+};
+
+export const changeRole = (dispatch, id) => {
+  console.log("in change role", id);
+  return dispatch => {
+    dispatch({ type: "ASYNC_START" });
+
+    fetchRole(id).then(resp => {
+      dispatch({ type: CHANGE_ROLE, role: resp });
+    });
+  };
+};
+
+export const updateSlide = (dispatch, data) => {
+  return dispatch => {
+    dispatch({ type: "ASYNC_START" });
+
+    editSlide(data).then(resp => {
+      dispatch({ type: CHANGE_ROLE, role: resp });
+    });
+  };
+};
+
+export const slideView = () => {
+  return { type: SLIDE_VIEW };
+};
+
+export const currentScene = data => {
+  return { type: CHANGE_SCENE, scene: data };
 };

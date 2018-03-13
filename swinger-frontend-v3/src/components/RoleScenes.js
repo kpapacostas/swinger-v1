@@ -1,5 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import * as actions from "../actions";
 
 class RoleScenes extends React.Component {
   constructor(props) {
@@ -34,7 +36,7 @@ class RoleScenes extends React.Component {
   };
 
   render() {
-    if (this.props.roleScenes.length) {
+    if (this.props.currentRole.scenes) {
       return (
         <div>
           <br />
@@ -44,10 +46,17 @@ class RoleScenes extends React.Component {
             Current Scenes
             <br />
             <br />
-            {this.props.roleScenes.map((s, i) => {
+            {this.props.currentRole.scenes.map((s, i) => {
               return (
                 <div
-                  onClick={this.props.displaySlides}
+                  onClick={() =>
+                    this.props.slideDisplayView({
+                      id: s.id,
+                      act: s.act,
+                      number: s.number,
+                      slides: s.slides
+                    })
+                  }
                   key={i}
                   className="ui tiny teal basic button"
                 >
@@ -77,8 +86,10 @@ class RoleScenes extends React.Component {
 const mapStateToProps = state => {
   return {
     currentUser: state.currentUser,
-    currentShow: state.currentShow
+    currentShow: state.currentShow,
+    currentRole: state.currentRole,
+    slideDisplay: state.slideDisplay
   };
 };
 
-export default connect(mapStateToProps)(RoleScenes);
+export default withRouter(connect(mapStateToProps, actions)(RoleScenes));

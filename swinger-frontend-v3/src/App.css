@@ -146,6 +146,15 @@ document body div #canvas-contaier {
   padding-bottom: 50px
 }
 
+.note-display {
+  width: 100px;
+  border-color: black;
+  border-width: 1px;
+  border-style: solid;
+  margin-top: 0px;
+  position: absolute;
+}
+
 .show-form {
   margin-right: 500px;
 }

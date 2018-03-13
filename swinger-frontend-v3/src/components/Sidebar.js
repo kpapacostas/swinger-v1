@@ -34,6 +34,10 @@ class Sidebar extends React.Component {
     });
   };
 
+  sceneDisplay = () => {
+    return this.props.currentRole;
+  };
+
   render() {
     return (
       <div>
@@ -45,18 +49,27 @@ class Sidebar extends React.Component {
               className="ui medium image item"
             />
           </div>
-          <h3 className=" item">MY SHOWS</h3>
-          {this.props.loggedIn ? this.showsDisplay() : null}
-          <br />
-          <div
-            id="new"
-            onClick={this.props.handleNewShow}
-            className="ui small button full"
-            href=""
-          >
-            <i className="add circle icon" />
-            Add New Show!
-          </div>
+          {this.props.currentRole ? (
+            <div>
+              <h3 className=" item">ROLE SCENES</h3>
+            </div>
+          ) : (
+            <div>
+              <h3 className=" item">MY SHOWS</h3>
+              {this.props.loggedIn ? this.showsDisplay() : null}
+              <br />
+              <div
+                id="new"
+                onClick={this.props.handleNewShow}
+                className="ui small button full"
+                href=""
+              >
+                <i className="add circle icon" />
+                Add New Show!
+              </div>
+            </div>
+          )}
+
           <div
             onClick={this.props.handleLogout}
             className="ui small button full"

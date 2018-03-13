@@ -10,7 +10,7 @@ class EditForm extends React.Component {
     this.state = {
       showTitle: "",
       tracks: [],
-      newTracks: [{ 0: "" }]
+      newTracks: []
     };
   }
 
@@ -126,7 +126,7 @@ class EditForm extends React.Component {
                     </button>
                   </div>
                 ))}
-                <label>New Tracks</label>
+                {this.state.newTracks.length ? <label>New Tracks</label> : null}
                 <div>
                   {this.state.newTracks.map((t, i) => (
                     <div key={i} id={i} className="track field">

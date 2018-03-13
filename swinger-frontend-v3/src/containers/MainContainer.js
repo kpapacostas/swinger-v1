@@ -5,7 +5,7 @@ import Login from "../components/Login";
 import Register from "../components/Register";
 import { connect } from "react-redux";
 import * as actions from "../actions";
-// import withAuth from "../hocs/withAuth";
+import SlideDisplay from "../components/SlideDisplay";
 
 class MainContainer extends React.Component {
   constructor(props) {
@@ -44,7 +44,7 @@ class MainContainer extends React.Component {
       <div className="container">
         <div>
           {this.props.history.location.pathname === "/" ? (
-            <img 
+            <img
               alt=""
               onClick={this.handleLoginClick}
               className="bounce_button"
@@ -64,11 +64,11 @@ class MainContainer extends React.Component {
             <Register login={this.handleLoginClick} />
           ) : null}
         </div>
-
         <Route
           path="/home"
           component={() => <ShowContainer handleLogout={this.handleLogout} />}
         />
+        <Route path="/slidedisplay" render={() => <SlideDisplay />} />
       </div>
     );
   }

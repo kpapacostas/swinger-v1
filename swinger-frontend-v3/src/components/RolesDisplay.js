@@ -5,11 +5,16 @@ import * as actions from "../actions";
 class RoleDisplay extends React.Component {
   deleteRole = () => {};
 
+  handleRoleClick = e => {
+    this.props.changeRoleDisplay();
+    this.props.changeRole(null, e.target.id);
+  };
+
   currentShowRoles = () => {
     return this.props.currentShow.scene_roles[0].roles.map((r, i) => (
       <div
         key={i}
-        onClick={this.props.displayRoleScenes}
+        onClick={this.handleRoleClick}
         className="ui tiny teal basic button"
       >
         <p id={r.id}>{r.name}</p>
@@ -29,4 +34,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(RoleDisplay);
+export default connect(mapStateToProps, actions)(RoleDisplay);

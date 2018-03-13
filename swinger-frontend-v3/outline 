@@ -1,0 +1,9 @@
+Scene:
+  Slide1:
+    actor_json: { 
+      you: [x, y],
+      audrey: [x, y],
+      other2: [x, y]
+    }
+    Notes:
+      note1: 'asdf'

@@ -20,18 +20,18 @@ class SceneDisplay extends React.Component {
 
   render() {
     return (
-      <div >
+      <div>
         <div className="ui small header">Act I</div>
         <div className="ui floating dropdown">
-            {this.props.currentShow ? this.actIscenes() : null}
-          </div>
-          <br></br>
-          <br></br>
-          <br></br>
-          <div className="ui small header">Act II</div>
-          <div className="ui floating dropdown">
-            {this.props.currentShow ? this.actIIscenes() : null}
-          </div>
+          {this.props.currentShow ? this.actIscenes() : null}
+        </div>
+        <br />
+        <br />
+        <br />
+        <div className="ui small header">Act II</div>
+        <div className="ui floating dropdown">
+          {this.props.currentShow ? this.actIIscenes() : null}
+        </div>
       </div>
     );
   }

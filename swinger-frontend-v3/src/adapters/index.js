@@ -55,6 +55,26 @@ export const fetchRole = id => {
   );
 };
 
+export const fetchScene = id => {
+  const params = {
+    method: "GET",
+    headers: headers
+  };
+  return fetch(`http://localhost:3000/api/v1/scenes/${id}`, params).then(resp =>
+    resp.json()
+  );
+};
+
+export const fetchNotes = slideId => {
+  const params = {
+    method: "GET",
+    headers: headers
+  };
+  return fetch(`http://localhost:3000/api/v1/notes/${slideId}`, params).then(
+    resp => resp.json()
+  );
+};
+
 //CREATE ////////////////////////////////////////////////////////////////////////
 
 export const createShow = (title, userId) => {
@@ -79,13 +99,13 @@ export const createScene = (number, act, show) => {
   );
 };
 
-export const createRole = (name, showId) => {
+export const createNote = data => {
   const params = {
     method: "POST",
     headers: headers,
-    body: JSON.stringify({ name, showId })
+    body: JSON.stringify(data)
   };
-  return fetch("http://localhost:3000/api/v1/roles", params).then(resp =>
+  return fetch("http://localhost:3000/api/v1/notes", params).then(resp =>
     resp.json()
   );
 };
@@ -97,6 +117,17 @@ export const createSlide = data => {
     body: JSON.stringify(data)
   };
   return fetch("http://localhost:3000/api/v1/slides", params).then(resp =>
+    resp.json()
+  );
+};
+
+export const createRole = (name, showId) => {
+  const params = {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify({ name, showId })
+  };
+  return fetch("http://localhost:3000/api/v1/roles", params).then(resp =>
     resp.json()
   );
 };
@@ -137,7 +168,6 @@ export const editScene = data => {
 };
 
 export const editSlide = data => {
-  console.log("in edit slide adapter", data);
   const params = {
     method: "PATCH",
     headers: headers,
@@ -156,6 +186,26 @@ export const destroyShow = id => {
     headers: headers
   };
   return fetch(`http://localhost:3000/api/v1/shows/${id}`, params).then(resp =>
+    resp.json()
+  );
+};
+
+export const destroySlide = id => {
+  const params = {
+    method: "DELETE",
+    headers: headers
+  };
+  return fetch(`http://localhost:3000/api/v1/slides/${id}`, params).then(resp =>
+    resp.json()
+  );
+};
+
+export const destroyNote = id => {
+  const params = {
+    method: "DELETE",
+    headers: headers
+  };
+  return fetch(`http://localhost:3000/api/v1/notes/${id}`, params).then(resp =>
     resp.json()
   );
 };

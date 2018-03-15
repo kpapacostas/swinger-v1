@@ -100,7 +100,7 @@ export const deleteRole = (dispatch, id) => {
 };
 
 export const changeRole = (dispatch, id) => {
-  console.log("in change role", id);
+  console.log("in chageRole actions", id);
   return dispatch => {
     dispatch({ type: "ASYNC_START" });
 

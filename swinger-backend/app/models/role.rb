@@ -13,10 +13,11 @@ class Role < ApplicationRecord
   end
 
   def scenes
-    self.slides.map do |s|
+    slide_scenes = self.slides.map do |s|
       scene = Scene.find(s.scene_id)
       slides = Slide.all.select{ |slide| slide.scene_id === scene.id}
       scene_slides = {"act" => scene.act, "number" => scene.number, "slides" => slides, "id" => scene.id }
     end
+    slide_scenes.uniq{|sc| sc["id"]}
   end
 end

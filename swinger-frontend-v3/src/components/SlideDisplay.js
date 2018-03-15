@@ -5,6 +5,8 @@ import StagePlot from "../stagePlot.jpg";
 import NotesBar from "./RightNotesBar";
 import SlidesBar from "./LeftSlideBar";
 import * as actions from "../actions";
+import { destroySlide, createSlide, fetchScene } from "../adapters";
+import { withRouter } from "react-router-dom";
 
 class SlideDisplay extends React.Component {
   constructor(...args) {
@@ -14,30 +16,30 @@ class SlideDisplay extends React.Component {
       slides: [],
       currentSlide: 0,
       coordinates: {},
-      editAlert: false
+      holdingCoors: {},
+      editAlert: false,
+      newSlide: false
     };
   }
 
   componentDidMount() {
+    const pathArr = this.props.history.location.pathname.split("/");
+    const id = parseInt(pathArr[pathArr.length - 1], 10);
     if (this.props.currentSceneDisplay.slides.length) {
-      this.setState({
-        slides: [...this.props.currentSceneDisplay.slides],
-        currentSlide: this.props.currentSceneDisplay.slides[0].number,
-        coordinates: this.props.currentSceneDisplay.slides[0].coordinates
+      fetchScene(id).then(resp => {
+        this.setState({
+          slides: [...resp.scene.slides],
+          currentSlide: resp.scene.slides[0],
+          coordinates: resp.scene.slides[0].coordinates
+        });
       });
     }
   }
 
-  handleDragDrop = e => {
-    const newCoordinates = {
-      x: e.target._lastPos.x,
-      y: e.target._lastPos.y
-    };
-    this.setState({ coordinates: newCoordinates, editAlert: true });
-  };
+  //SAVE & DELETE SLIDES/////////////////////////////////////////////////////////////////////////
 
   handleSave = () => {
-    const coors = this.state.coordinates;
+    const coors = this.state.holdingCoors;
     const saveSlide = this.state.slides.find(s => {
       return s.number === `${this.state.currentSlide}`;
     });
@@ -49,17 +51,64 @@ class SlideDisplay extends React.Component {
       role_id: roleId,
       coordinates: coors
     });
+    this.setState({ coordinates: coors, editAlert: false });
   };
 
+  handleSlideDelete = () => {
+    const deleteSlide = this.state.slides.find(s => {
+      return s.number === `${this.state.currentSlide.number}`;
+    });
+    const newSlides = this.state.slides.filter(s => {
+      return s.id !== deleteSlide.id;
+    });
+    destroySlide(deleteSlide.id);
+    if (newSlides.length) {
+      this.setState({
+        slides: newSlides,
+        currentSlide: newSlides[0],
+        coordinates: newSlides[0].coordinates
+      });
+    } else {
+      this.setState({
+        coordinates: { x: 20, y: 20 },
+        newSlide: true
+      });
+    }
+  };
+
+  //SLIDE CHANGES////////////////////////////////////////////////////////////////////////////
   handleCurrentSlide = num => {
     const slide = this.state.slides.find(s => {
       return s.number === num;
     });
     if (slide) {
       this.setState({
-        currentSlide: slide.number,
+        currentSlide: slide,
         coordinates: slide.coordinates
       });
+    }
+  };
+
+  handleNote = (action, data) => {
+    const slide1 = this.state.slides.filter(s => s.id === data.slideId);
+    const slideIndex = this.state.slides.indexOf(slide1);
+    console.log("index", slideIndex);
+    switch (action) {
+      case "new":
+        this.setState({
+          slides: [...this.state.slides.slice(0, slideIndex)]
+        });
+        break;
+      case "delete":
+        const newNotes = this.state.currentSlideNotes.filter(
+          n => n.id !== data.slideId
+        );
+        this.setState({
+          currentSlideNotes: [...newNotes]
+        });
+        break;
+      default:
+        return null;
     }
   };
 
@@ -68,15 +117,72 @@ class SlideDisplay extends React.Component {
   };
 
   handleNextSlide = e => {
-    const num = parseInt(this.state.currentSlide, 10) + 1;
+    const num = parseInt(this.state.currentSlide.number, 10) + 1;
     this.handleCurrentSlide(`${num}`);
   };
 
-  undoMove = () => {};
+  handleAddSlide = e => {
+    this.setState({
+      currentSlide: 0,
+      coordinates: { x: 20, y: 20 },
+      newSlide: true
+    });
+  };
+
+  //ACTOR MOVES////////////////////////////////////////////////////////////////////////////
+
+  handleDragDrop = e => {
+    const newSlideNum =
+      parseFloat(this.state.slides[this.state.slides.length - 1].number) +
+      parseFloat(1);
+
+    const newCoordinates = {
+      x: e.target._lastPos.x,
+      y: e.target._lastPos.y
+    };
+
+    if (this.state.newSlide) {
+      createSlide({
+        number: newSlideNum,
+        sceneId: this.props.currentSceneDisplay.id,
+        roleId: this.props.currentRole.id,
+        coordinates: newCoordinates
+      });
+      this.setState((prevState, props) => {
+        return {
+          slides: [
+            ...this.state.slides,
+            {
+              number: newSlideNum,
+              coordinates: newCoordinates
+            }
+          ],
+          currentSlide: {
+            number: newSlideNum,
+            sceneId: this.props.currentSceneDisplay.id,
+            roleId: this.props.currentRole.id,
+            coordinates: newCoordinates
+          },
+          coordinates: newCoordinates,
+          newSlide: false
+        };
+      });
+    } else {
+      this.setState({ holdingCoors: newCoordinates, editAlert: true });
+    }
+  };
+
+  undoMove = e => {
+    this.setState({ editAlert: false });
+  };
 
   createActors = () => {
-    const x = this.state.coordinates.x;
-    const y = this.state.coordinates.y;
+    const x = this.state.editAlert
+      ? this.state.holdingCoors.x
+      : this.state.coordinates.x;
+    const y = this.state.editAlert
+      ? this.state.holdingCoors.y
+      : this.state.coordinates.y;
     return (
       <Layer>
         <Rect
@@ -94,8 +200,8 @@ class SlideDisplay extends React.Component {
   };
 
   render() {
-    console.log("in slide display", this.props.currentRole);
     const titleStyle = { marginLeft: "17%" };
+    const deleteStyle = { marginLeft: "42%" };
     const divStyle = {
       color: "blue",
       width: "600px",
@@ -109,6 +215,10 @@ class SlideDisplay extends React.Component {
 
     const act = this.props.currentSceneDisplay.act;
     const scene = this.props.currentSceneDisplay.number;
+    const slides = this.state.slides.sort((s1, s2) => {
+      return s1.number - s2.number;
+    });
+    const notes = this.state.currentSlide.notes;
 
     const editAlert = (
       <div className="ui compact info message">
@@ -118,7 +228,9 @@ class SlideDisplay extends React.Component {
           Save
         </button>
         {}
-        <button className="ui mini button">Undo</button>
+        <button onClick={this.undoMove} className="ui mini button">
+          Undo
+        </button>
       </div>
     );
 
@@ -127,25 +239,36 @@ class SlideDisplay extends React.Component {
         <div>
           <SlidesBar
             handleSlideChange={this.handleSlideChange}
-            slides={this.state.slides}
+            slides={slides}
+            handleAddSlide={this.handleAddSlide}
           />
           <div style={titleStyle}>
             <h1>
               Act {act}, Scene {scene}
             </h1>
-            <br />
-            Slide {this.state.currentSlide}
-            <br />
+            {this.state.newSlide ? (
+              <div className="ui compact info message">
+                Choose location of your role for this slide
+              </div>
+            ) : (
+              <h3>Slide {this.state.currentSlide.number}</h3>
+            )}
             {this.state.editAlert ? (
               editAlert
             ) : (
               <div>
-                <br />
                 <button
                   onClick={this.handleNextSlide}
                   className="ui mini button"
                 >
                   Next Slide <i className="ui angle double right icon" />
+                </button>
+                <button
+                  style={deleteStyle}
+                  onClick={this.handleSlideDelete}
+                  className="ui mini basic red button"
+                >
+                  Delete Slide
                 </button>
               </div>
             )}
@@ -155,7 +278,11 @@ class SlideDisplay extends React.Component {
             <Stage width={700} height={700} margin={50}>
               {this.state.slides.length ? this.createActors() : null}
             </Stage>
-            <NotesBar />
+            <NotesBar
+              notes={notes}
+              currentSlide={this.state.currentSlide}
+              handleNote={this.handleNote}
+            />
           </div>
         </div>
       );
@@ -174,4 +301,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, actions)(SlideDisplay);
+export default withRouter(connect(mapStateToProps, actions)(SlideDisplay));

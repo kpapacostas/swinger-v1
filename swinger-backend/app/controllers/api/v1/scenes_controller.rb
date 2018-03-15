@@ -27,7 +27,8 @@ class Api::V1::ScenesController < ApplicationController
   end
 
   def show
-    render json: @scene, status: 200
+    scene = Scene.find(params[:id])
+    render json: SceneSerializer.new(scene), status: 200
   end
 
   private

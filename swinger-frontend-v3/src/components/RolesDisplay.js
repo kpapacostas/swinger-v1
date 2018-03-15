@@ -6,8 +6,8 @@ class RoleDisplay extends React.Component {
   deleteRole = () => {};
 
   handleRoleClick = e => {
-    this.props.changeRoleDisplay();
     this.props.changeRole(null, e.target.id);
+    this.props.changeRoleDisplay();
   };
 
   currentShowRoles = () => {
@@ -23,7 +23,14 @@ class RoleDisplay extends React.Component {
   };
 
   render() {
-    return <div>{this.props.currentShow ? this.currentShowRoles() : null}</div>;
+    console.log();
+    return (
+      <div>
+        {this.props.currentShow.scene_roles[0].roles[0].id
+          ? this.currentShowRoles()
+          : null}
+      </div>
+    );
   }
 }
 

@@ -68,7 +68,7 @@ class MainContainer extends React.Component {
           path="/home"
           component={() => <ShowContainer handleLogout={this.handleLogout} />}
         />
-        <Route path="/slidedisplay" render={() => <SlideDisplay />} />
+        <Route path="/slidedisplay/:sceneId" render={() => <SlideDisplay />} />
       </div>
     );
   }

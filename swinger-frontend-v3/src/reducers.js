@@ -52,6 +52,7 @@ const slideViewReducer = (state = false, action) => {
 const roleReducer = (state = null, action) => {
   switch (action.type) {
     case CHANGE_ROLE:
+      console.log("in change role", action.role.role);
       return action.role.role;
     default:
       return state;

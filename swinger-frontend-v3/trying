@@ -1,0 +1,16 @@
+{
+  this.props.currentSlide
+    ? this.props.currentSlide.notes.map((n, i) => (
+        <div key={i} className="ui item">
+          {n.body}
+          {this.state.editDisplay ? (
+            <i
+              id={n.id}
+              onClick={this.deleteNote}
+              className="ui red minus circle icon"
+            />
+          ) : null}
+        </div>
+      ))
+    : null;
+}

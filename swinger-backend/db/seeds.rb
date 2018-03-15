@@ -42,3 +42,10 @@ slide6 = Slide.create(role_id: 1, scene_id: 1, number: 3, coordinates: {x: 100, 
 slide2 = Slide.create(role_id: 1, scene_id: 2, number: 4, coordinates: {x: 10, y: 20})
 slide3 = Slide.create(role_id: 1, scene_id: 3, coordinates: {x: 50, y: 100})
 slide4 = Slide.create(role_id: 1, scene_id: 4, coordinates: {x: 100, y: 75})
+
+
+note1 = Note.create(slide_id: 1, body: "do stuff")
+note2 = Note.create(slide_id: 2, body: "do other stuff")
+note3 = Note.create(slide_id: 3, body: "do good stuff")
+note4 = Note.create(slide_id: 3, body: "do better stuff")
+note5 = Note.create(slide_id: 4, body: "do great stuff")

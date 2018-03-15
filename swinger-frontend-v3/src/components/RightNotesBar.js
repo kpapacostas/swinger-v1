@@ -1,75 +1,103 @@
 import React from "react";
-import NoteDisplay from "./NoteDisplay";
+import * as actions from "../actions";
+import { createNote, destroyNote } from "../adapters";
+import { connect } from "react-redux";
 
 class NotesBar extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      notes: [],
-      currentNote: {}
+      newNote: false,
+      editDisplay: false
     };
   }
 
-  handleNoteClick = e => {
-    const notes = this.state.notes;
-    const note = notes.filter(n => n.title === e.target.id);
-    this.setState({ currentNote: note });
+  newNote = () => {
+    this.setState({ newNote: !this.state.newNote });
+  };
+
+  editNotes = () => {
+    this.setState({ editDisplay: !this.state.editDisplay });
+  };
+
+  deleteNote = e => {
+    destroyNote(e.target.id);
+    this.props.handleNote("delete", e.target.id);
   };
 
   addNote = e => {
     e.preventDefault();
-    this.setState(
-      {
-        notes: [
-          ...this.state.notes,
-          {
-            title: document.getElementById("note-title").value,
-            body: document.getElementById("note-field").value
-          }
-        ]
-      },
-      () => {
-        document.getElementById("note-title").value = "";
-        document.getElementById("note-field").value = "";
-      }
-    );
+    const noteBody = document.getElementById("note-field").value;
+    const slideId = this.props.currentSlide.id;
+    console.log("slide id notes bar", slideId);
+    createNote({ body: noteBody, slideId });
+    this.props.handleNote("new", { body: noteBody, slideId });
+    this.setState({ newNote: false });
   };
 
   render() {
+    const menuStyle = {
+      overflow: "scroll",
+      width: "30%"
+    };
+
+    const noteDisplay = () => {
+      return this.props.notes.map((n, i) => (
+        <div key={i} className="ui item">
+          {n.body}
+          {this.state.editDisplay ? (
+            <i
+              id={n.id}
+              onClick={this.deleteNote}
+              className="ui red minus circle icon"
+            />
+          ) : null}
+        </div>
+      ));
+    };
+
     return (
       <div className="ui grid">
-        <div className="ten wide column" />
-        <div className="two wide column">{<NoteDisplay />}</div>
-        <div className="four wide column">
-          <div className={`ui large right fixed vertical menu`}>
-            <div width="100px" height="300px" className="ui form item">
-              <div className="field">
-                <label>New Note</label>
-                <input placeholder="Note Title" id="note-title" />
+        <div className="five wide column">
+          <div
+            id="note-list"
+            style={menuStyle}
+            className={`ui large right fixed vertical menu`}
+          >
+            {this.state.newNote ? (
+              <div width="100px" height="300px" className="ui form item">
+                <h4>NEW NOTE</h4>
                 <textarea placeholder="Note Body" id="note-field" />
-                <div onClick={this.addNote} className="ui tiny teal button">
+                <div
+                  onClick={this.addNote}
+                  className="ui tiny basic teal button"
+                >
                   Save Note
                 </div>
-              </div>
-            </div>
-            {this.state.notes.length ? (
-              <div>
-                <div className="ui medium header item">Slide Notes</div>
-                <div className="ui vertical fluid right tabular menu">
-                  {this.state.notes.map((n, i) => (
-                    <a
-                      key={i}
-                      id={n.title}
-                      onClick={this.handleNoteClick}
-                      className="item"
-                    >
-                      {n.title}
-                    </a>
-                  ))}
+                <div onClick={this.newNote} className="ui tiny button">
+                  Cancel
                 </div>
               </div>
-            ) : null}
+            ) : (
+              <div className="item">
+                <h4>SLIDE NOTES</h4>
+                {this.state.editDisplay ? (
+                  <div className="ui tiny button" onClick={this.editNotes}>
+                    Done
+                  </div>
+                ) : (
+                  <div className="ui tiny button" onClick={this.editNotes}>
+                    Edit Notes
+                  </div>
+                )}
+                <div onClick={this.newNote} className="ui tiny button">
+                  <i className="add circle icon" />
+                  Add Note
+                </div>
+                {this.props.currentSlide.notes ? noteDisplay() : null}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -77,14 +105,4 @@ class NotesBar extends React.Component {
   }
 }
 
-export default NotesBar;
-
-// <div className="four wide column">
-//   <div className="ui segment">
-//     {!!this.state.currentNote.length
-//       ? (document.getElementById(
-//         `${this.state.currentNote[0].title}`
-//       ).innerHTML = this.state.currentNote[0].body)
-//       : null}
-//     </div>
-//   </div>
+export default connect(null, actions)(NotesBar);

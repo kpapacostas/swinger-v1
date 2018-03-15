@@ -23,9 +23,17 @@ class SlidesBar extends React.Component {
         <div className="fourteen wide column">
           <div className={`ui tiny left fixed vertical menu`}>
             <div className="ui item">
-              <h4>Slide Display</h4>
-              {slideDisplays()}
+              <h4>SLIDES</h4>
             </div>
+            <div
+              onClick={this.props.handleAddSlide}
+              className="ui mini button full"
+              href=""
+            >
+              <i className="add circle icon" />
+              Add Slide
+            </div>
+            {slideDisplays()}
           </div>
         </div>
       </div>

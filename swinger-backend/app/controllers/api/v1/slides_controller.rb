@@ -6,9 +6,8 @@ class Api::V1::SlidesController < ApplicationController
   end
 
   def create
-    byebug
-    slide = Slide.new(role_id: params[:roleId], scene_id: params[:sceneId], coordinates: params[:coordinates])
-    byebug
+    slide = Slide.new(role_id: params[:roleId], scene_id: params[:sceneId], number: params[:number], coordinates: params[:coordinates])
+
     if slide.valid?
       slide.save
       render json: slide, status: 201
@@ -18,15 +17,14 @@ class Api::V1::SlidesController < ApplicationController
   end
 
   def update
-    @role = Role.find(params[:role_id])
+    role = Role.find(params[:role_id])
     slide = Slide.find(params[:id])
-    slide.update()
-    render json: RoleSerializer.new(@role), status: 200
+    slide.update(coordinates: params[:coordinates])
+    render json: RoleSerializer.new(role), status: 200
   end
 
   def destroy
     slide = Slide.find(params[:id])
-    slideId = slide.id
     slide.destroy
     render json: {message:"Zap! Slide deleted", noteId:noteId}
   end

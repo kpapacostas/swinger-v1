@@ -109,7 +109,7 @@ class ShowContainer extends React.Component {
         editShowForm: false,
         roleDisplay: false
       },
-      () => this.props.history.push("/slidedisplay")
+      () => this.props.history.push(`/slidedisplay/${data.id}`)
     );
   };
 

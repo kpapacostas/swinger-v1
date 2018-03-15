@@ -1,8 +1,8 @@
 class Api::V1::RolesController < ApplicationController
 
   def show
-    @role = Role.find(params[:id])
-    render json: RoleSerializer.new(@role), status: 200
+    role = Role.find(params[:id])
+    render json: RoleSerializer.new(role), status: 200
   end
 
   def index

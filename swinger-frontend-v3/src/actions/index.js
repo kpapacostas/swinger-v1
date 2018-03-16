@@ -8,7 +8,9 @@ import {
   DELETE_ROLE,
   CHANGE_ROLE,
   SLIDE_VIEW,
-  CHANGE_SCENE
+  CHANGE_SCENE,
+  FETCH_SCENE,
+  FETCH_SLIDE
 } from "./types";
 import {
   fetchCurrentUser,
@@ -19,7 +21,9 @@ import {
   destroyShow,
   destroyRole,
   fetchRole,
-  editSlide
+  editSlide,
+  fetchScene,
+  fetchSlide
 } from "../adapters";
 
 export const fetchUser = dispatch => {
@@ -37,6 +41,24 @@ export const fetchCurrentShow = (dispatch, showName) => {
     dispatch({ type: "ASYNC_START" });
     fetchShow(showName).then(data => {
       dispatch({ type: FETCH_SHOW, show: data });
+    });
+  };
+};
+
+export const fetchCurrentScene = (dispatch, sceneId) => {
+  return dispatch => {
+    dispatch({ type: "ASYNC_START" });
+    fetchScene(sceneId).then(data => {
+      dispatch({ type: FETCH_SCENE, scene: data });
+    });
+  };
+};
+
+export const fetchCurrentSlide = (dispatch, slideId) => {
+  return dispatch => {
+    dispatch({ type: "ASYNC_START" });
+    fetchSlide(slideId).then(data => {
+      dispatch({ type: FETCH_SLIDE, slide: data });
     });
   };
 };

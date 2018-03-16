@@ -30,9 +30,8 @@ class Api::V1::SlidesController < ApplicationController
   end
 
   def show
-    byebug
     slide = Slide.find(params[:id])
-    render json: slide, status: 200
+    render json: SlideSerializer.new(slide), status: 200
   end
 
   # private

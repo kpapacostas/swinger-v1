@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import Sidebar from "../components/Sidebar";
 import withAuth from "../hocs/withAuth";
 import NewShowForm from "../components/NewShowForm";
-import SceneDisplay from "../components/ScenesDisplay";
 import EditForm from "../components/EditShowForm";
 import { withRouter } from "react-router-dom";
 import RolesDisplay from "../components/RolesDisplay";
@@ -24,6 +23,7 @@ class ShowContainer extends React.Component {
   }
 
   changeCurrentShow = showTitle => {
+    console.log("in change current show", showTitle);
     this.setState(
       {
         newShowForm: false,
@@ -88,12 +88,6 @@ class ShowContainer extends React.Component {
           <div className="">
             <h4>Tracks</h4>
             <RolesDisplay changeRoleDisplay={this.changeRoleDisplay} />
-          </div>
-          <br />
-          <br />
-          <div className="">
-            <h4>Scenes</h4>
-            {<SceneDisplay />}
           </div>
         </div>
       </div>

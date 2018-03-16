@@ -22,18 +22,19 @@ class NotesBar extends React.Component {
   };
 
   deleteNote = e => {
-    destroyNote(e.target.id);
-    this.props.handleNote("delete", e.target.id);
+    destroyNote(e.target.id).then(resp => {
+      this.props.handleNote(this.props.currentSlide.id);
+    });
   };
 
   addNote = e => {
     e.preventDefault();
     const noteBody = document.getElementById("note-field").value;
     const slideId = this.props.currentSlide.id;
-    console.log("slide id notes bar", slideId);
-    createNote({ body: noteBody, slideId });
-    this.props.handleNote("new", { body: noteBody, slideId });
-    this.setState({ newNote: false });
+    createNote({ body: noteBody, slideId }).then(resp => {
+      this.props.handleNote(slideId);
+      this.setState({ newNote: false });
+    });
   };
 
   render() {
@@ -43,18 +44,20 @@ class NotesBar extends React.Component {
     };
 
     const noteDisplay = () => {
-      return this.props.notes.map((n, i) => (
-        <div key={i} className="ui item">
-          {n.body}
-          {this.state.editDisplay ? (
-            <i
-              id={n.id}
-              onClick={this.deleteNote}
-              className="ui red minus circle icon"
-            />
-          ) : null}
-        </div>
-      ));
+      if (this.props.currentSlide.notes) {
+        return this.props.currentSlide.notes.map((n, i) => (
+          <div key={i} className="ui item">
+            {n.body}
+            {this.state.editDisplay ? (
+              <i
+                id={n.id}
+                onClick={this.deleteNote}
+                className="ui red minus circle icon"
+              />
+            ) : null}
+          </div>
+        ));
+      }
     };
 
     return (
@@ -95,7 +98,7 @@ class NotesBar extends React.Component {
                   <i className="add circle icon" />
                   Add Note
                 </div>
-                {this.props.currentSlide.notes ? noteDisplay() : null}
+                {this.props.currentSlide ? noteDisplay() : null}
               </div>
             )}
           </div>

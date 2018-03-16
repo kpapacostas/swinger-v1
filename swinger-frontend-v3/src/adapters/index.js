@@ -65,6 +65,16 @@ export const fetchScene = id => {
   );
 };
 
+export const fetchSlide = id => {
+  const params = {
+    method: "GET",
+    headers: headers
+  };
+  return fetch(`http://localhost:3000/api/v1/slides/${id}`, params).then(resp =>
+    resp.json()
+  );
+};
+
 export const fetchNotes = slideId => {
   const params = {
     method: "GET",

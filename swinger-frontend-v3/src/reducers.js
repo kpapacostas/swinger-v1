@@ -9,12 +9,15 @@ import {
   DELETE_ROLE,
   SLIDE_VIEW,
   CHANGE_ROLE,
-  CHANGE_SCENE
+  CHANGE_SCENE,
+  FETCH_SCENE,
+  FETCH_SLIDE
 } from "./actions/types";
 
 const showReducer = (state = null, action) => {
   switch (action.type) {
     case FETCH_SHOW:
+      console.log("fetch response", action.show.show);
       return action.show.show;
     case CREATE_SHOW:
       return action.show.show;
@@ -52,7 +55,6 @@ const slideViewReducer = (state = false, action) => {
 const roleReducer = (state = null, action) => {
   switch (action.type) {
     case CHANGE_ROLE:
-      console.log("in change role", action.role.role);
       return action.role.role;
     default:
       return state;
@@ -63,6 +65,17 @@ const sceneReducer = (state = null, action) => {
   switch (action.type) {
     case CHANGE_SCENE:
       return action.scene;
+    case FETCH_SCENE:
+      return action.scene;
+    default:
+      return state;
+  }
+};
+
+const slideReducer = (state = null, action) => {
+  switch (action.type) {
+    case FETCH_SLIDE:
+      return action.slide;
     default:
       return state;
   }
@@ -73,6 +86,7 @@ const rootReducer = combineReducers({
   currentShow: showReducer,
   currentRole: roleReducer,
   currentScene: sceneReducer,
+  currentSlide: slideReducer,
   slideView: slideViewReducer
 });
 

@@ -6,24 +6,26 @@ class RoleDisplay extends React.Component {
   deleteRole = () => {};
 
   handleRoleClick = e => {
+    console.log("in handle role click", e.target.id);
     this.props.changeRole(null, e.target.id);
     this.props.changeRoleDisplay();
   };
 
   currentShowRoles = () => {
-    return this.props.currentShow.scene_roles[0].roles.map((r, i) => (
-      <div
-        key={i}
-        onClick={this.handleRoleClick}
-        className="ui tiny teal basic button"
-      >
-        <p id={r.id}>{r.name}</p>
-      </div>
-    ));
+    if (this.props.currentShow.scene_roles[0].roles[0].id) {
+      return this.props.currentShow.scene_roles[0].roles.map((r, i) => (
+        <div
+          key={i}
+          onClick={this.handleRoleClick}
+          className="ui tiny teal basic button"
+        >
+          <p id={r.id}>{r.name}</p>
+        </div>
+      ));
+    }
   };
 
   render() {
-    console.log();
     return (
       <div>
         {this.props.currentShow.scene_roles[0].roles[0].id

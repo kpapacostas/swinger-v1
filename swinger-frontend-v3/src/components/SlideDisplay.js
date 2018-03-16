@@ -5,16 +5,16 @@ import StagePlot from "../stagePlot.jpg";
 import NotesBar from "./RightNotesBar";
 import SlidesBar from "./LeftSlideBar";
 import * as actions from "../actions";
-import { destroySlide, createSlide, fetchScene } from "../adapters";
+import { destroySlide, createSlide, fetchScene, fetchSlide } from "../adapters";
 import { withRouter } from "react-router-dom";
 
 class SlideDisplay extends React.Component {
   constructor(...args) {
     super(...args);
     this.state = {
-      color: "green",
+      sceneId: 0,
       slides: [],
-      currentSlide: 0,
+      currentSlide: {},
       coordinates: {},
       holdingCoors: {},
       editAlert: false,
@@ -25,9 +25,10 @@ class SlideDisplay extends React.Component {
   componentDidMount() {
     const pathArr = this.props.history.location.pathname.split("/");
     const id = parseInt(pathArr[pathArr.length - 1], 10);
-    if (this.props.currentSceneDisplay.slides.length) {
+    if (id) {
       fetchScene(id).then(resp => {
         this.setState({
+          sceneId: resp.scene.id,
           slides: [...resp.scene.slides],
           currentSlide: resp.scene.slides[0],
           coordinates: resp.scene.slides[0].coordinates
@@ -35,13 +36,12 @@ class SlideDisplay extends React.Component {
       });
     }
   }
-
-  //SAVE & DELETE SLIDES/////////////////////////////////////////////////////////////////////////
+  //SAVE & DELETE SLIDES/////////////////////////////////////////////////////////////////////
 
   handleSave = () => {
     const coors = this.state.holdingCoors;
     const saveSlide = this.state.slides.find(s => {
-      return s.number === `${this.state.currentSlide}`;
+      return s.id === this.state.currentSlide.id;
     });
     const slideId = saveSlide.id;
     const roleId = this.props.currentRole.id;
@@ -78,38 +78,27 @@ class SlideDisplay extends React.Component {
 
   //SLIDE CHANGES////////////////////////////////////////////////////////////////////////////
   handleCurrentSlide = num => {
+    this.props.fetchCurrentSlide(null, this.state.currentSlide.id);
     const slide = this.state.slides.find(s => {
       return s.number === num;
     });
     if (slide) {
-      this.setState({
-        currentSlide: slide,
-        coordinates: slide.coordinates
+      fetchSlide(slide.id).then(resp => {
+        this.setState({
+          currentSlide: resp.slide,
+          coordinates: resp.slide.coordinates
+        });
       });
     }
   };
 
-  handleNote = (action, data) => {
-    const slide1 = this.state.slides.filter(s => s.id === data.slideId);
-    const slideIndex = this.state.slides.indexOf(slide1);
-    console.log("index", slideIndex);
-    switch (action) {
-      case "new":
-        this.setState({
-          slides: [...this.state.slides.slice(0, slideIndex)]
-        });
-        break;
-      case "delete":
-        const newNotes = this.state.currentSlideNotes.filter(
-          n => n.id !== data.slideId
-        );
-        this.setState({
-          currentSlideNotes: [...newNotes]
-        });
-        break;
-      default:
-        return null;
-    }
+  handleNote = slideId => {
+    fetchSlide(slideId).then(resp => {
+      this.setState({
+        currentSlide: resp.slide,
+        coordinates: resp.slide.coordinates
+      });
+    });
   };
 
   handleSlideChange = e => {
@@ -200,7 +189,9 @@ class SlideDisplay extends React.Component {
   };
 
   render() {
+    console.log(this.props.currentSceneDisplay);
     const titleStyle = { marginLeft: "17%" };
+    const headerStyle = { color: "teal" };
     const deleteStyle = { marginLeft: "42%" };
     const divStyle = {
       color: "blue",
@@ -218,7 +209,6 @@ class SlideDisplay extends React.Component {
     const slides = this.state.slides.sort((s1, s2) => {
       return s1.number - s2.number;
     });
-    const notes = this.state.currentSlide.notes;
 
     const editAlert = (
       <div className="ui compact info message">
@@ -243,8 +233,8 @@ class SlideDisplay extends React.Component {
             handleAddSlide={this.handleAddSlide}
           />
           <div style={titleStyle}>
-            <h1>
-              Act {act}, Scene {scene}
+            <h1 style={headerStyle}>
+              ACT {act} SCENE {scene}
             </h1>
             {this.state.newSlide ? (
               <div className="ui compact info message">
@@ -279,7 +269,6 @@ class SlideDisplay extends React.Component {
               {this.state.slides.length ? this.createActors() : null}
             </Stage>
             <NotesBar
-              notes={notes}
               currentSlide={this.state.currentSlide}
               handleNote={this.handleNote}
             />
@@ -297,6 +286,7 @@ const mapStateToProps = state => {
     currentUser: state.currentUser,
     currentShow: state.currentShow,
     currentRole: state.currentRole,
+    currentSlide: state.currentSlide,
     currentSceneDisplay: state.currentScene
   };
 };

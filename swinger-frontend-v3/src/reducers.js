@@ -17,12 +17,9 @@ import {
 const showReducer = (state = null, action) => {
   switch (action.type) {
     case FETCH_SHOW:
-      console.log("fetch response", action.show.show);
       return action.show.show;
     case CREATE_SHOW:
       return action.show.show;
-    case DELETE_SHOW:
-      return null;
     case DELETE_ROLE:
       return action.show.show;
     default:
@@ -36,6 +33,8 @@ const authReducer = (state = {}, action) => {
       return action.auth;
     case LOGOUT:
       return {};
+    case DELETE_SHOW:
+      return action.user;
     case UPDATE_SHOWS:
       return action.user.user;
     default:

@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import * as actions from "../actions";
-import { fetchScene, createSlide } from "../adapters";
+import { createSlide } from "../adapters";
 
 class RoleScenes extends React.Component {
   constructor(props) {
@@ -22,9 +22,11 @@ class RoleScenes extends React.Component {
   };
 
   handleAddScene = () => {
-    // const scenes = this.props.currentShow.scenes;
-    const actNum = parseInt(document.getElementById("act-number").value);
-    const sceneNum = parseInt(document.getElementById("scene-number").value);
+    const actNum = parseInt(document.getElementById("act-number").value, 10);
+    const sceneNum = parseInt(
+      document.getElementById("scene-number").value,
+      10
+    );
     const scene = this.props.currentShow.scenes.filter(sc => {
       return sc.act === actNum && sc.number === sceneNum;
     });

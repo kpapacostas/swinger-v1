@@ -9,6 +9,7 @@ import RolesDisplay from "../components/RolesDisplay";
 import RoleScenes from "../components/RoleScenes";
 import dancingGif from "../dancingGif.gif";
 import * as actions from "../actions";
+// import { destroyShow } from "../adapters";
 
 class ShowContainer extends React.Component {
   constructor(props) {
@@ -17,18 +18,15 @@ class ShowContainer extends React.Component {
     this.state = {
       newShowForm: false,
       editShowForm: false,
-      deletedShow: false,
       roleDisplay: false
     };
   }
 
   changeCurrentShow = showTitle => {
-    console.log("in change current show", showTitle);
     this.setState(
       {
         newShowForm: false,
         editShowForm: false,
-        deletedShow: false,
         roleDisplay: false
       },
       () => this.props.fetchCurrentShow(null, showTitle)
@@ -37,7 +35,6 @@ class ShowContainer extends React.Component {
 
   changeRoleDisplay = () => {
     this.setState({
-      deletedShow: false,
       newShowForm: false,
       editShowForm: false,
       roleDisplay: true
@@ -45,8 +42,8 @@ class ShowContainer extends React.Component {
   };
 
   deleteShow = () => {
+    this.props.deleteShow(this.props.currentShow.id);
     this.setState({ editShowForm: false });
-    this.props.deleteShow(null, this.props.currentShow.id);
   };
 
   handleShowForm = e => {

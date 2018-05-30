@@ -2,6 +2,7 @@ import React from "react";
 import * as actions from "../actions";
 import { createNote, destroyNote } from "../adapters";
 import { connect } from "react-redux";
+import NoteCard from "./NoteCard";
 
 class NotesBar extends React.Component {
   constructor(props) {
@@ -28,9 +29,12 @@ class NotesBar extends React.Component {
   };
 
   addNote = e => {
+    const currSlide = this.props.currentSlide;
+    debugger;
     e.preventDefault();
     const noteBody = document.getElementById("note-field").value;
     const slideId = this.props.currentSlide.id;
+    // console.log("in add note, slideId:", slideId);
     createNote({ body: noteBody, slideId }).then(resp => {
       this.props.handleNote(slideId);
       this.setState({ newNote: false });
@@ -40,22 +44,18 @@ class NotesBar extends React.Component {
   render() {
     const menuStyle = {
       overflow: "scroll",
-      width: "30%"
+      width: "25%"
     };
 
     const noteDisplay = () => {
       if (this.props.currentSlide.notes) {
         return this.props.currentSlide.notes.map((n, i) => (
-          <div key={i} className="ui item">
-            {n.body}
-            {this.state.editDisplay ? (
-              <i
-                id={n.id}
-                onClick={this.deleteNote}
-                className="ui red minus circle icon"
-              />
-            ) : null}
-          </div>
+          <NoteCard
+            key={i}
+            note={n}
+            editDisplay={this.state.editDisplay}
+            deleteNote={this.deleteNote}
+          />
         ));
       }
     };
@@ -86,7 +86,7 @@ class NotesBar extends React.Component {
               <div className="item">
                 <h4>SLIDE NOTES</h4>
                 {this.state.editDisplay ? (
-                  <div className="ui tiny button" onClick={this.editNotes}>
+                  <div className="ui tiny teal button" onClick={this.editNotes}>
                     Done
                   </div>
                 ) : (

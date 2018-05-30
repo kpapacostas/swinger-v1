@@ -136,26 +136,27 @@ class SlideDisplay extends React.Component {
         sceneId: this.props.currentSceneDisplay.id,
         roleId: this.props.currentRole.id,
         coordinates: newCoordinates
-      });
-      this.setState((prevState, props) => {
-        return {
-          slides: [
-            ...this.state.slides,
-            {
+      }).then(resp =>
+        this.setState((prevState, props) => {
+          return {
+            slides: [
+              ...this.state.slides,
+              {
+                number: newSlideNum,
+                coordinates: newCoordinates
+              }
+            ],
+            currentSlide: {
               number: newSlideNum,
+              sceneId: this.props.currentSceneDisplay.id,
+              roleId: this.props.currentRole.id,
               coordinates: newCoordinates
-            }
-          ],
-          currentSlide: {
-            number: newSlideNum,
-            sceneId: this.props.currentSceneDisplay.id,
-            roleId: this.props.currentRole.id,
-            coordinates: newCoordinates
-          },
-          coordinates: newCoordinates,
-          newSlide: false
-        };
-      });
+            },
+            coordinates: newCoordinates,
+            newSlide: false
+          };
+        })
+      );
     } else {
       this.setState({ holdingCoors: newCoordinates, editAlert: true });
     }
@@ -189,7 +190,6 @@ class SlideDisplay extends React.Component {
   };
 
   render() {
-    console.log(this.props.currentSceneDisplay);
     const titleStyle = { marginLeft: "17%" };
     const headerStyle = { color: "teal" };
     const deleteStyle = { marginLeft: "42%" };

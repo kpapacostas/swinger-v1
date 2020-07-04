@@ -3,47 +3,45 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import * as actions from "../actions";
 import { createSlide } from "../adapters";
+import { useState, useEffect } from "react";
 
-class RoleScenes extends React.Component {
-  constructor(props) {
-    super(props);
+const RoleScenes = ({
+  currentRole,
+  currentShow,
+  slideDisplayView,
+  changeRole,
+}) => {
+  const [actIScenes, setActIScenes] = useState([]);
+  const [actIIScenes, setActIIScenes] = useState([]);
 
-    this.state = {
-      actIscenes: [],
-      actIIscenes: []
-    };
-  }
+  useEffect(() => {
+    if (currentRole.scenes) {
+      setActIScenes(currentRole.scenes.filter((s) => s.act === 1));
+      setActIIScenes(currentRole.scenes.filter((s) => s.act === 2));
+    }
+  }, []);
 
-  componentDidMount = () => {
-    this.setState({
-      actIscenes: this.props.currentRole.scenes.filter(s => s.act === 1),
-      actIIscenes: this.props.currentRole.scenes.filter(s => s.act === 2)
-    });
-  };
-
-  handleAddScene = () => {
+  const handleAddScene = () => {
     const actNum = parseInt(document.getElementById("act-number").value, 10);
     const sceneNum = parseInt(
       document.getElementById("scene-number").value,
       10
     );
-    const scene = this.props.currentShow.scenes.filter(sc => {
+    const scene = currentShow.scenes.filter((sc) => {
       return sc.act === actNum && sc.number === sceneNum;
     });
     if (scene.length) {
       const data = {
-        roleId: this.props.currentRole.id,
+        roleId: currentRole.id,
         sceneId: scene[0].id,
         coordinates: { x: 20, y: 20 },
-        number: 1
+        number: 1,
       };
 
-      createSlide(data).then(resp => {
-        this.props.changeRole(null, this.props.currentRole.id);
-        this.setState({
-          actIscenes: this.props.currentRole.scenes.filter(s => s.act === 1),
-          actIIscenes: this.props.currentRole.scenes.filter(s => s.act === 2)
-        });
+      createSlide(data).then((resp) => {
+        changeRole(null, currentRole.id);
+        setActIScenes(currentRole.scenes.filter((s) => s.act === 1));
+        setActIIScenes(currentRole.scenes.filter((s) => s.act === 2));
         document.getElementById("act-number").value = "";
         document.getElementById("scene-number").value = "";
       });
@@ -52,9 +50,9 @@ class RoleScenes extends React.Component {
     }
   };
 
-  newSceneForm = () => {
+  const newSceneForm = () => {
     const textStyle1 = {
-      color: "teal"
+      color: "teal",
     };
     return (
       <div>
@@ -73,7 +71,7 @@ class RoleScenes extends React.Component {
             </div>
             <br />
           </div>
-          <div onClick={this.handleAddScene} className="ui mini button">
+          <div onClick={handleAddScene} className="ui mini button">
             <i className="add circle icon" /> Add Scene
           </div>
         </div>
@@ -81,88 +79,88 @@ class RoleScenes extends React.Component {
     );
   };
 
-  render() {
-    const textStyle = {
-      color: "teal"
-    };
-    const italic = {
-      fontStyle: "italic",
-      color: "gray"
-    };
+  // render() {
+  const textStyle = {
+    color: "teal",
+  };
+  const italic = {
+    fontStyle: "italic",
+    color: "gray",
+  };
 
-    if (this.props.currentRole.scenes) {
-      const actIscenes = this.state.actIscenes.filter(s => s.act === 1);
-      const actIIscenes = this.state.actIIscenes.filter(s => s.act === 2);
-      return (
+  if (currentRole.scenes) {
+    // setActIScenes(actIScenes.filter((s) => s.act === 1));
+    // setActIIScenes(actIIScenes.filter((s) => s.act === 2));
+    return (
+      <div>
+        <br />
+        {newSceneForm()}
         <div>
           <br />
-          {this.newSceneForm()}
-          <div>
-            <br />
-            <h3 style={textStyle}>TRACK SCENES</h3>
-            <h4>Act I Scenes:</h4>
-            {actIscenes.length ? (
-              <div>
-                {actIscenes.map((s, i) => {
-                  return (
-                    <div
-                      onClick={() =>
-                        this.props.slideDisplayView({
-                          id: s.id,
-                          act: s.act,
-                          number: s.number,
-                          slides: s.slides
-                        })
-                      }
-                      key={i}
-                      className="ui tiny grey basic button"
-                    >
-                      Scene {s.number}
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div style={italic}>Add scenes above.</div>
-            )}
-            <h4>Act II Scenes:</h4>
-            {actIIscenes.length ? (
-              <div>
-                {actIIscenes.map((s, i) => {
-                  return (
-                    <div
-                      onClick={() => this.props.slideDisplayView({ id: s.id })}
-                      key={i}
-                      className="ui tiny grey basic button"
-                    >
-                      Scene {s.number}
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div style={italic}>Add scenes above.</div>
-            )}
-          </div>
+          <h3 style={textStyle}>TRACK SCENES</h3>
+          <h4>Act I Scenes:</h4>
+          {actIScenes.length ? (
+            <div>
+              {actIScenes.map((s, i) => {
+                return (
+                  <div
+                    onClick={() =>
+                      slideDisplayView({
+                        id: s.id,
+                        act: s.act,
+                        number: s.number,
+                        slides: s.slides,
+                      })
+                    }
+                    key={i}
+                    className="ui tiny grey basic button"
+                  >
+                    Scene {s.number}
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div style={italic}>Add scenes above.</div>
+          )}
+          <h4>Act II Scenes:</h4>
+          {actIIScenes.length ? (
+            <div>
+              {actIIScenes.map((s, i) => {
+                return (
+                  <div
+                    onClick={() => slideDisplayView({ id: s.id })}
+                    key={i}
+                    className="ui tiny grey basic button"
+                  >
+                    Scene {s.number}
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div style={italic}>Add scenes above.</div>
+          )}
         </div>
-      );
-    } else {
-      return (
-        <div>
-          <br />
-          {this.newSceneForm()}
-        </div>
-      );
-    }
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <br />
+        {newSceneForm()}
+      </div>
+    );
   }
-}
+};
+// }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     currentUser: state.currentUser,
     currentShow: state.currentShow,
     currentRole: state.currentRole,
-    slideDisplay: state.slideDisplay
+    slideDisplay: state.slideDisplay,
   };
 };
 

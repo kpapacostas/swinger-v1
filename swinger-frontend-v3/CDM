@@ -1,0 +1,17 @@
+componentDidMount() {
+  const pathArr = this.props.history.location.pathname.split("/");
+  const id = parseInt(pathArr[pathArr.length - 1], 10);
+  if (id) {
+    fetchScene(id).then(resp => {
+      console.log(this.props.currentSceneDisplay),
+        this.props.fetchCurrentScene(null, id);
+      this.setState({
+        sceneId: this.props.currentSceneDisplay.scene.id,
+        slides: [...this.props.currentSceneDisplay.scene.slides],
+        currentSlide: this.props.currentSceneDisplay.scene.slides[0],
+        coordinates: this.props.currentSceneDisplay.scene.slides[0]
+          .coordinates
+      });
+    });
+  }
+}

@@ -18,26 +18,24 @@ class ShowContainer extends React.Component {
     this.state = {
       newShowForm: false,
       editShowForm: false,
-      roleDisplay: false
+      roleDisplay: false,
     };
   }
 
-  changeCurrentShow = showTitle => {
-    this.setState(
-      {
-        newShowForm: false,
-        editShowForm: false,
-        roleDisplay: false
-      },
-      () => this.props.fetchCurrentShow(null, showTitle)
-    );
+  changeCurrentShow = (showTitle) => {
+    this.setState({
+      newShowForm: false,
+      editShowForm: false,
+      roleDisplay: false,
+    });
+    this.props.fetchCurrentShow(null, showTitle);
   };
 
   changeRoleDisplay = () => {
     this.setState({
       newShowForm: false,
       editShowForm: false,
-      roleDisplay: true
+      roleDisplay: true,
     });
   };
 
@@ -46,18 +44,18 @@ class ShowContainer extends React.Component {
     this.setState({ editShowForm: false });
   };
 
-  handleShowForm = e => {
+  handleShowForm = (e) => {
     switch (e.target.id) {
       case "new":
         this.setState({
           newShowForm: true,
-          editShowForm: false
+          editShowForm: false,
         });
         break;
       case "edit":
         this.setState({
           newShowForm: false,
-          editShowForm: true
+          editShowForm: true,
         });
         break;
       default:
@@ -91,20 +89,21 @@ class ShowContainer extends React.Component {
     );
   };
 
-  slideDisplayView = data => {
+  slideDisplayView = (data) => {
     this.props.currentScene(data);
     this.setState(
       {
         deletedShow: false,
         newShowForm: false,
         editShowForm: false,
-        roleDisplay: false
+        roleDisplay: false,
       },
       () => this.props.history.push(`/slidedisplay/${data.id}`)
     );
   };
 
   render() {
+    console.log("in show container", this.props.currentShow);
     const divStyle = {
       display: "block",
       width: "400px",
@@ -116,7 +115,7 @@ class ShowContainer extends React.Component {
       marginTop: "15%",
       shadowBlur: "100px",
       backgroundSize: "100%",
-      backgroundRepeat: "no-repeat"
+      backgroundRepeat: "no-repeat",
     };
     return (
       <div className="ui grid">
@@ -163,12 +162,13 @@ class ShowContainer extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
+  console.log("show container state", state);
   return {
     currentUser: state.currentUser,
     currentShow: state.currentShow,
     currentRole: state.currentRole,
-    slideDisplay: state.slideDisplay
+    slideDisplay: state.slideDisplay,
   };
 };
 export default withRouter(

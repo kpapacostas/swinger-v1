@@ -3,11 +3,11 @@ import { connect } from "react-redux";
 import * as actions from "../actions";
 
 class RoleDisplay extends React.Component {
-  deleteRole = () => {};
+  // deleteRole = () => {};
 
-  handleRoleClick = e => {
-    console.log("in handle role click", e.target.id);
-    this.props.changeRole(null, e.target.id);
+  handleRoleClick = (e) => {
+    console.log("in role display", e.target);
+    this.props.changeRole(null, e.target.children[0].id);
     this.props.changeRoleDisplay();
   };
 
@@ -36,10 +36,10 @@ class RoleDisplay extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     currentUser: state.currentUser,
-    currentShow: state.currentShow
+    currentShow: state.currentShow,
   };
 };
 

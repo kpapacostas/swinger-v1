@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Stage, Layer, Rect } from "react-konva";
 import StagePlot from "../stagePlot.jpg";
-import NotesBar from "./RightNotesBar";
+import NotesBar from "./NotesBar";
 import SlidesBar from "./LeftSlideBar";
 import * as actions from "../actions";
 import { destroySlide, createSlide, fetchScene, fetchSlide } from "../adapters";
@@ -18,7 +18,7 @@ class SlideDisplay extends React.Component {
       coordinates: {},
       holdingCoors: {},
       editAlert: false,
-      newSlide: false
+      newSlide: false,
     };
   }
 
@@ -26,12 +26,12 @@ class SlideDisplay extends React.Component {
     const pathArr = this.props.history.location.pathname.split("/");
     const id = parseInt(pathArr[pathArr.length - 1], 10);
     if (id) {
-      fetchScene(id).then(resp => {
+      fetchScene(id).then((resp) => {
         this.setState({
-          sceneId: resp.scene.id,
-          slides: [...resp.scene.slides],
-          currentSlide: resp.scene.slides[0],
-          coordinates: resp.scene.slides[0].coordinates
+          sceneId: resp.id,
+          slides: [...resp.slides],
+          currentSlide: resp.slides[0],
+          coordinates: resp.slides[0].coordinates,
         });
       });
     }
@@ -40,7 +40,7 @@ class SlideDisplay extends React.Component {
 
   handleSave = () => {
     const coors = this.state.holdingCoors;
-    const saveSlide = this.state.slides.find(s => {
+    const saveSlide = this.state.slides.find((s) => {
       return s.id === this.state.currentSlide.id;
     });
     const slideId = saveSlide.id;
@@ -49,16 +49,16 @@ class SlideDisplay extends React.Component {
     this.props.updateSlide(null, {
       id: slideId,
       role_id: roleId,
-      coordinates: coors
+      coordinates: coors,
     });
     this.setState({ coordinates: coors, editAlert: false });
   };
 
   handleSlideDelete = () => {
-    const deleteSlide = this.state.slides.find(s => {
+    const deleteSlide = this.state.slides.find((s) => {
       return s.number === `${this.state.currentSlide.number}`;
     });
-    const newSlides = this.state.slides.filter(s => {
+    const newSlides = this.state.slides.filter((s) => {
       return s.id !== deleteSlide.id;
     });
     destroySlide(deleteSlide.id);
@@ -66,68 +66,68 @@ class SlideDisplay extends React.Component {
       this.setState({
         slides: newSlides,
         currentSlide: newSlides[0],
-        coordinates: newSlides[0].coordinates
+        coordinates: newSlides[0].coordinates,
       });
     } else {
       this.setState({
         coordinates: { x: 20, y: 20 },
-        newSlide: true
+        newSlide: true,
       });
     }
   };
 
   //SLIDE CHANGES////////////////////////////////////////////////////////////////////////////
-  handleCurrentSlide = num => {
+  handleCurrentSlide = (num) => {
     this.props.fetchCurrentSlide(null, this.state.currentSlide.id);
-    const slide = this.state.slides.find(s => {
+    const slide = this.state.slides.find((s) => {
       return s.number === num;
     });
     if (slide) {
-      fetchSlide(slide.id).then(resp => {
+      fetchSlide(slide.id).then((resp) => {
         this.setState({
           currentSlide: resp.slide,
-          coordinates: resp.slide.coordinates
+          coordinates: resp.slide.coordinates,
         });
       });
     }
   };
 
-  handleNote = slideId => {
-    fetchSlide(slideId).then(resp => {
+  handleNote = (slideId) => {
+    fetchSlide(slideId).then((resp) => {
       this.setState({
         currentSlide: resp.slide,
-        coordinates: resp.slide.coordinates
+        coordinates: resp.slide.coordinates,
       });
     });
   };
 
-  handleSlideChange = e => {
+  handleSlideChange = (e) => {
     this.handleCurrentSlide(e.target.id);
   };
 
-  handleNextSlide = e => {
+  handleNextSlide = (e) => {
     const num = parseInt(this.state.currentSlide.number, 10) + 1;
     this.handleCurrentSlide(`${num}`);
   };
 
-  handleAddSlide = e => {
+  handleAddSlide = (e) => {
     this.setState({
       currentSlide: 0,
       coordinates: { x: 20, y: 20 },
-      newSlide: true
+      newSlide: true,
     });
   };
 
   //ACTOR MOVES////////////////////////////////////////////////////////////////////////////
 
-  handleDragDrop = e => {
+  handleDragDrop = (e) => {
     const newSlideNum =
       parseFloat(this.state.slides[this.state.slides.length - 1].number) +
       parseFloat(1);
 
     const newCoordinates = {
       x: e.target._lastPos.x,
-      y: e.target._lastPos.y
+      y: e.target._lastPos.y,
     };
 
     if (this.state.newSlide) {
@@ -135,25 +135,25 @@ class SlideDisplay extends React.Component {
         number: newSlideNum,
         sceneId: this.props.currentSceneDisplay.id,
         roleId: this.props.currentRole.id,
-        coordinates: newCoordinates
-      }).then(resp =>
+        coordinates: newCoordinates,
+      }).then((resp) =>
         this.setState((prevState, props) => {
           return {
             slides: [
               ...this.state.slides,
               {
                 number: newSlideNum,
-                coordinates: newCoordinates
-              }
+                coordinates: newCoordinates,
+              },
             ],
             currentSlide: {
               number: newSlideNum,
               sceneId: this.props.currentSceneDisplay.id,
               roleId: this.props.currentRole.id,
-              coordinates: newCoordinates
+              coordinates: newCoordinates,
             },
             coordinates: newCoordinates,
-            newSlide: false
+            newSlide: false,
           };
         })
       );
@@ -162,7 +162,7 @@ class SlideDisplay extends React.Component {
     }
   };
 
-  undoMove = e => {
+  undoMove = (e) => {
     this.setState({ editAlert: false });
   };
 
@@ -201,7 +201,7 @@ class SlideDisplay extends React.Component {
       marginLeft: "17%",
       padding: "20px",
       backgroundSize: "100%",
-      backgroundRepeat: "no-repeat"
+      backgroundRepeat: "no-repeat",
     };
 
     const act = this.props.currentSceneDisplay.act;
@@ -262,17 +262,15 @@ class SlideDisplay extends React.Component {
                 </button>
               </div>
             )}
-          </div>
-          <br />
-          <div style={divStyle}>
-            <Stage width={700} height={700} margin={50}>
-              {this.state.slides.length ? this.createActors() : null}
-            </Stage>
+            {console.log("in slide itself", this.state.currentSlide)}
+            <Stage width={700} height={700} margin={50}></Stage>
             <NotesBar
               currentSlide={this.state.currentSlide}
               handleNote={this.handleNote}
             />
           </div>
+          <br />
+          <div style={divStyle}></div>
         </div>
       );
     } else {
@@ -280,14 +278,14 @@ class SlideDisplay extends React.Component {
     }
   }
 }
-
-const mapStateToProps = state => {
+// {this.state.slides.length ? this.createActors() : null}
+const mapStateToProps = (state) => {
   return {
     currentUser: state.currentUser,
     currentShow: state.currentShow,
     currentRole: state.currentRole,
     currentSlide: state.currentSlide,
-    currentSceneDisplay: state.currentScene
+    currentSceneDisplay: state.currentScene,
   };
 };
 

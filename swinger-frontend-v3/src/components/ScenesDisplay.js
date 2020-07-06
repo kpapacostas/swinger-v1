@@ -1,9 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 
-class SceneDisplay extends React.Component {
+const SceneDisplay = (props) => {
   actIIscenes = () => {
-    return this.props.currentShow.scene_roles[0].scenes.actII.map((s, i) => (
+    return props.currentShow.scene_roles[0].scenes.actII.map((s, i) => (
       <a key={i} className="ui raised segment scene-card">
         {s.number}
       </a>
@@ -11,7 +11,7 @@ class SceneDisplay extends React.Component {
   };
 
   actIscenes = () => {
-    return this.props.currentShow.scene_roles[0].scenes.actI.map((s, i) => (
+    return props.currentShow.scene_roles[0].scenes.actI.map((s, i) => (
       <a key={i} className="ui raised segment scene-card">
         {s.number}
       </a>
@@ -23,14 +23,14 @@ class SceneDisplay extends React.Component {
       <div>
         <div className="ui small header">Act I</div>
         <div className="ui floating dropdown">
-          {this.props.currentShow ? this.actIscenes() : null}
+          {props.currentShow ? actIscenes() : null}
         </div>
         <br />
         <br />
         <br />
         <div className="ui small header">Act II</div>
         <div className="ui floating dropdown">
-          {this.props.currentShow ? this.actIIscenes() : null}
+          {props.currentShow ? actIIscenes() : null}
         </div>
       </div>
     );

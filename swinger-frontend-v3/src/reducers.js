@@ -17,7 +17,6 @@ import {
 const showReducer = (state = null, action) => {
   switch (action.type) {
     case FETCH_SHOW:
-      console.log("in show reducer", action.show);
       return action.show;
     case CREATE_SHOW:
       return action.show.show;

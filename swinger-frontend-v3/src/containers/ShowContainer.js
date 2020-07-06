@@ -103,7 +103,6 @@ class ShowContainer extends React.Component {
   };
 
   render() {
-    console.log("in show container", this.props.currentShow);
     const divStyle = {
       display: "block",
       width: "400px",
